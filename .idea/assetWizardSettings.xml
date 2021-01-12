@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/flag/baseline_flag_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/settings/baseline_settings_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -34,8 +34,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_flag_24px" />
-                            <entry key="sourceFile" value="C:\Users\2190746\Downloads\EventusGest\app\src\main\res\drawable\flag-24px.svg" />
+                            <entry key="outputName" value="ic_log_out" />
+                            <entry key="sourceFile" value="C:\Users\macas\Downloads\App\app\src\main\res\drawable\log_out.svg" />
                           </map>
                         </option>
                       </PersistentState>
