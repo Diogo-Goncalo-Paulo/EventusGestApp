@@ -17,11 +17,17 @@
         <activity android:name=".ViewCredentialActivity" />
         <activity android:name=".ViewMovementActivity" />
         <activity android:name=".LoginActivity">
+        <activity android:name=".ViewCredentialActivity">
+
+        </activity>
+        <activity android:name=".ViewMovementActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity">
         </activity>
     </application>
 

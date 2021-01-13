@@ -3,10 +3,15 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="login">Entrar</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="credenciais">Credenciais</string>
     <string name="movimentos">Movimentos</string>
+    <string name="imagem_credencial_desc">Imagem Credencial</string>
+    <string name="nao">Não</string>
+    <string name="informacoes">Informações</string>
+    <string name="sem_informacoes">Sem informações</string>
+    <string name="marcar_credencial">Marcar Credencial</string>
+    <string name="ucid">UCID</string>
 </resources>
