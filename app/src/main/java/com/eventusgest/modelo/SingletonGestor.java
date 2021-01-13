@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class SingletonGestor {
     private static SingletonGestor instance = null;
     private ArrayList<Credential> credentials;
+    private CredentialDBHelper credentialsDB = null;
 
     public static synchronized SingletonGestor getInstance(Context context) {
         if (instance == null) {
@@ -16,8 +17,9 @@ public class SingletonGestor {
     }
 
     public SingletonGestor(Context context) {
-        gerarFakeData();
-        //credentials = new ArrayList<>();
+        //gerarFakeData();
+        credentials = new ArrayList<>();
+        credentialsDB = new CredentialDBHelper(context);
     }
 
     private void gerarFakeData () {
@@ -35,6 +37,16 @@ public class SingletonGestor {
             if(c.getId() == id)
                 return c;
         return null;
+    }
+
+    public ArrayList<Credential> getCredentialsDB() {
+        credentials = credentialsDB.getAllCredentialsDB();
+        return credentials;
+        //return new ArrayList<>(livros);
+    }
+
+    public void addCredentialBD (Credential credential) {
+        credentialsDB.addCredentialDb(credential);
     }
 
     public ArrayList<Credential> getAllCredentials () {
