@@ -8,6 +8,8 @@ public class SingletonGestor {
     private static SingletonGestor instance = null;
     private ArrayList<Credential> credentials;
     private CredentialDBHelper credentialsDB = null;
+    private ArrayList<Movement> movements;
+    private MovementDBHelper movementsDB = null;
 
     public static synchronized SingletonGestor getInstance(Context context) {
         if (instance == null) {
@@ -20,6 +22,8 @@ public class SingletonGestor {
         //gerarFakeData();
         credentials = new ArrayList<>();
         credentialsDB = new CredentialDBHelper(context);
+        movements = new ArrayList<>();
+        movementsDB = new MovementDBHelper(context);
     }
 
     private void gerarFakeData () {
@@ -51,4 +55,26 @@ public class SingletonGestor {
     public ArrayList<Credential> getAllCredentials () {
         return new ArrayList<>(credentials);
     }
+
+    public Movement getMovement (int id) {
+        for (Movement c : movements)
+            if(c.getId() == id)
+                return c;
+        return null;
+    }
+
+    public ArrayList<Movement> getMovementsDB() {
+        movements = movementsDB.getAllMovementsDB();
+        return movements;
+    }
+
+    public void addMovementBD (Movement movement) {
+        movementsDB.addMovementDb(movement);
+    }
+
+    public ArrayList<Movement> getAllMovements () {
+        return new ArrayList<>(movements);
+    }
+
+
 }
