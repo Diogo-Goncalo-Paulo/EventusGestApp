@@ -25,7 +25,11 @@ public class CredentialFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        ArrayList<Credential> credentials = SingletonGestor.getInstance(getContext()).getAllCredentials();
+
+        Credential credential = new Credential(1, 1, 1, 1, 0, 0, "dasqwe21");
+
+        SingletonGestor.getInstance(getContext()).addCredentialBD(credential);
+        System.out.println(SingletonGestor.getInstance(getContext()).getAllCredentialsDB());
 
         return inflater.inflate(R.layout.fragment_list_credential, container, false);
     }
