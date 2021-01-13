@@ -3,7 +3,7 @@ package com.eventusgest.modelo;
 public class Credential {
     private int id, idEntity, idCurrentArea, idEvent, flagged, blocked;
 
-    private String ucid, entityName, entityTypeName, areaName, eventName, resetTime;
+    private String ucid;
 
     private static int autoIncrementedId = 1;
 

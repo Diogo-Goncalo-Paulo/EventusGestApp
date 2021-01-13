@@ -65,6 +65,10 @@ public class CredentialDBHelper extends SQLiteOpenHelper {
         return credential;
     }
 
+    public void removeAllCredentials() {
+        this.db.delete(TABLE_CREDENTIALS,null, null);
+    }
+
     public ArrayList<Credential> getAllCredentialsDB() {
         ArrayList<Credential> credentials = new ArrayList<>();
         Cursor cursor = this.db.query(TABLE_CREDENTIALS, new String[]{ID_CREDENTIAL, UCID_CREDENTIAL, ID_ENTITY_CREDENTIAL, ID_CURRENTAREA_CREDENTIAL, ID_EVENT_CREDENTIAL, FLAGGED_CREDENTIAL, BLOCKED_CREDENTIAL}, null, null, null, null, null);

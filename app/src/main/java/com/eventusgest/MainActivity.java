@@ -24,6 +24,15 @@ NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     private FragmentManager fragmentManager;
     private TextView tvUsername;
+    public static final String USER = "USER_PREF_SHARED";
+    public static final String USER_ID = "USER_ID";
+    public static final String USERNAME = "USERNAME";
+    public static final String DISPLAYNAME = "DISPLAYNAME";
+    public static final String CURRENT_EVENT = "CURRENT_EVENT";
+    public static final String CURRENT_EVENT_NAME = "CURRENT_EVENT_NAME";
+    public static final String ACCESS_POINT = "ACCESS_POINT";
+    public static final String ACCESS_POINT_NAME = "ACCESS_POINT_NAME";
+    public static final String USER_ROLE = "USER_ROLE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
