@@ -1,16 +1,6 @@
 package com.eventusgest;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,6 +10,15 @@ import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 public class MainActivity extends AppCompatActivity implements
 NavigationView.OnNavigationItemSelectedListener {
 
@@ -27,6 +26,9 @@ NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     private FragmentManager fragmentManager;
     private TextView tvUsername;
+    private TextView tvRole;
+    private TextView tvAccessPoint;
+    private TextView tvCurrentEvent;
     public static final String USER = "USER_PREF_SHARED";
     public static final String USER_ID = "USER_ID";
     public static final String USERNAME = "USERNAME";
@@ -63,14 +65,29 @@ NavigationView.OnNavigationItemSelectedListener {
 
     private void carregarCabecalho() {
         SharedPreferences sharedPrefUser = getSharedPreferences(USER, Context.MODE_PRIVATE);
-        String username = sharedPrefUser.getString(USERNAME, DISPLAYNAME);
-        
-        if(username == null)
-            username = sharedPrefUser.getString(USERNAME, "bruh");
+        String username = sharedPrefUser.getString(USERNAME, USERNAME);
+        String displayname = sharedPrefUser.getString(DISPLAYNAME, DISPLAYNAME);
+        String role = sharedPrefUser.getString(USER_ROLE, USER_ROLE);
+        String currentevent = sharedPrefUser.getString(CURRENT_EVENT_NAME, CURRENT_EVENT_NAME);
+        String accesspoint = sharedPrefUser.getString(ACCESS_POINT_NAME, ACCESS_POINT_NAME);
 
         View nView = navigationView.getHeaderView(0);
         tvUsername = nView.findViewById(R.id.tvUsernameDisplayName);
-        tvUsername.setText(username);
+        if(displayname == null) {
+            tvUsername.setText(username);
+        } else {
+            tvUsername.setText(displayname);
+        }
+
+        tvRole = nView.findViewById(R.id.tvRole);
+        tvAccessPoint = nView.findViewById(R.id.tvUserAccessPoint);
+        tvCurrentEvent = nView.findViewById(R.id.tvCurrentEvent);
+        if (accesspoint != null)
+            tvAccessPoint.setText(accesspoint);
+        if (currentevent != null)
+            tvCurrentEvent.setText(String.format("%s • ", currentevent));
+        if (role != null)
+            tvRole.setText(role);
     }
 
     private void carregarFragmentoInicial() {

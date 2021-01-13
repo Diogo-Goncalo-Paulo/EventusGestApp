@@ -27,8 +27,8 @@ public class SingletonGestor {
     private static SingletonGestor instance = null;
     private ArrayList<Credential> credentials;
     private CredentialDBHelper credentialsDB = null;
-    private String mUrlAPIUser = "http://192.168.1.107/eventusgest/backend/web/api/user/username/";
-    private String mUrlAPICredential = "http://192.168.1.107/eventusgest/backend/web/api/credential";
+    private String mUrlAPIUser = "http://192.168.1.68/eventusgest/backend/web/api/user/username/";
+    private String mUrlAPICredential = "http://192.168.1.68/eventusgest/backend/web/api/credential";
     private static RequestQueue volleyQueue;
     private CredentialListener credentialListener;
     private LoginListener loginListener;
