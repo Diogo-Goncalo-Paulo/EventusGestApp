@@ -13,8 +13,11 @@ import android.widget.Toast;
 import com.eventusgest.listeners.CredentialListener;
 import com.eventusgest.listeners.LoginListener;
 import com.eventusgest.modelo.SingletonGestor;
+import com.eventusgest.modelo.User;
 import com.eventusgest.utils.CredentialJsonParser;
 import com.eventusgest.utils.UserJsonParser;
+
+import org.json.JSONException;
 
 public class LoginActivity extends AppCompatActivity implements LoginListener {
     public EditText etUsername;
@@ -44,12 +47,19 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
     @Override
     public void onValidateLogin(String username, String password, String response) {
-        System.out.println(UserJsonParser.parserJsonUser(response));
+        User u = UserJsonParser.parserJsonUser(response);
 
         if (username != null) {
             SharedPreferences sharedPrefUser = getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPrefUser.edit();
-            editor.putString(MainActivity.USERNAME, username);
+            editor.putInt(MainActivity.USER_ID, u.getId());
+            editor.putString(MainActivity.USERNAME, u.getUsername());
+            editor.putString(MainActivity.DISPLAYNAME, u.getDisplayName());
+            editor.putInt(MainActivity.CURRENT_EVENT, u.getCurrentEvent());
+            editor.putString(MainActivity.CURRENT_EVENT_NAME, u.getEventName());
+            editor.putInt(MainActivity.ACCESS_POINT, u.getAccessPoint());
+            editor.putString(MainActivity.ACCESS_POINT_NAME, u.getAccessPointName());
+            editor.putString(MainActivity.USER_ROLE, u.getRole());
             editor.apply();
 
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

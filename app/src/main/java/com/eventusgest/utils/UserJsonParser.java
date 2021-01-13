@@ -16,10 +16,12 @@ public class UserJsonParser {
             String username = user.getString("username");
             String displayName = user.getString("displayName");
             int currentEvent = user.getInt("currentEvent");
-            String eventName = user.getString("event.name");
+            JSONObject event = new JSONObject(user.getString("event"));
+            String eventName = event.getString("name");
+            JSONObject accessPoint = new JSONObject(user.getString("accessPoint"));
             int idAccessPoint = user.getInt("idAccessPoint");
-            String accessPointName = user.getString("accessPoint.name");
-            String role = "bruh";
+            String accessPointName = accessPoint.getString("name");
+            String role =  user.getString("role");;
 
             auxUser = new User(id, currentEvent, eventName, idAccessPoint, accessPointName, username, displayName, role);
         } catch (JSONException e) {

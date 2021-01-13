@@ -9,7 +9,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,15 +53,24 @@ NavigationView.OnNavigationItemSelectedListener {
         toggle.syncState();
         drawer.addDrawerListener(toggle);
 
-        Intent intent = getIntent();
+        View nView = navigationView.getHeaderView(0);
+
+        fragmentManager = getSupportFragmentManager();
+        carregarCabecalho();
+        navigationView.setNavigationItemSelectedListener(this);
+        carregarFragmentoInicial();
+    }
+
+    private void carregarCabecalho() {
+        SharedPreferences sharedPrefUser = getSharedPreferences(USER, Context.MODE_PRIVATE);
+        String username = sharedPrefUser.getString(USERNAME, DISPLAYNAME);
+        
+        if(username == null)
+            username = sharedPrefUser.getString(USERNAME, "bruh");
 
         View nView = navigationView.getHeaderView(0);
         tvUsername = nView.findViewById(R.id.tvUsernameDisplayName);
-        tvUsername.setText(intent.getStringExtra("username"));
-
-        fragmentManager = getSupportFragmentManager();
-        navigationView.setNavigationItemSelectedListener(this);
-        carregarFragmentoInicial();
+        tvUsername.setText(username);
     }
 
     private void carregarFragmentoInicial() {
