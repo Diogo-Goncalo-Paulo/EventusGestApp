@@ -43,10 +43,9 @@ public class SingletonGestor {
         return null;
     }
 
-    public ArrayList<Credential> getCredentialsDB() {
+    public ArrayList<Credential> getAllCredentialsDB() {
         credentials = credentialsDB.getAllCredentialsDB();
         return credentials;
-        //return new ArrayList<>(livros);
     }
 
     public void addCredentialBD (Credential credential) {

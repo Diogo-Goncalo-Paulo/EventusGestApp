@@ -87,7 +87,6 @@ lint/tmp/
 # Android Profiling
 *.hprof
 .idea/
-app/src/main/res/drawable/alert.xml
 .gradle/6.1.1/executionHistory/executionHistory.bin
 .gradle/6.1.1/executionHistory/executionHistory.lock
 .gradle/6.1.1/fileChanges/last-build.bin
@@ -172,3 +171,5 @@ local.properties
 .gradle/checksums/checksums.lock
 .gradle/buildOutputCleanup/outputFiles.bin
 .gradle/buildOutputCleanup/buildOutputCleanup.lock
+.idea/caches/build_file_checksums.ser
+.idea/caches/build_file_checksums.ser
