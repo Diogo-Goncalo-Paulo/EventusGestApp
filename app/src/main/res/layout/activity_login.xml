@@ -8,11 +8,18 @@
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <TextView
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_weight="0" />
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:fontFamily="sans-serif-condensed-light"
+        android:gravity="center_horizontal"
+        android:includeFontPadding="false"
+        android:text="@string/eventusgest"
+        android:textColor="@color/colorAccent"
+        android:textSize="36sp"
+        android:textStyle="bold" />
 
     <Space
         android:layout_width="match_parent"
@@ -26,7 +33,8 @@
         android:layout_weight="0"
         android:ems="10"
         android:hint="@string/username"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/etPassword"
@@ -35,22 +43,19 @@
         android:layout_weight="0"
         android:ems="10"
         android:hint="@string/password"
-        android:inputType="textPassword" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_weight="0" />
+        android:inputType="textPassword"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/button"
-        style="@android:style/Widget.Holo.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
+        android:layout_marginTop="25dp"
         android:layout_weight="0"
+        android:background="@drawable/rounded_corners"
         android:onClick="onClickLogin"
         android:text="@string/login"
-        android:textColor="#FFFFFF" />
+        android:textSize="18sp" />
 </LinearLayout>

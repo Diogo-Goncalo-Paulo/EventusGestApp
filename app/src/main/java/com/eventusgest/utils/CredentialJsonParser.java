@@ -1,9 +1,5 @@
 package com.eventusgest.utils;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-
 import com.eventusgest.modelo.Credential;
 
 import org.json.JSONArray;
@@ -72,11 +68,4 @@ public class CredentialJsonParser {
         return auxCredential;
     }
 
-
-    public static boolean isConnectionInternet(Context context) {
-        ConnectivityManager cn = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cn.getActiveNetworkInfo();
-
-        return ni != null && ni.isConnected();
-    }
 }

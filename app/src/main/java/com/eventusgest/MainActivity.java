@@ -40,6 +40,8 @@ NavigationView.OnNavigationItemSelectedListener {
     public static final String ACCESS_POINT_NAME = "ACCESS_POINT_NAME";
     public static final String USER_ROLE = "USER_ROLE";
     public static final String AUTH = "AUTH";
+    public static final String API_ACCESS = "API_ACCESS";
+    public static final String API_URL = "API_URL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
