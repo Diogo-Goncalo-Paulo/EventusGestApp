@@ -1,8 +1,6 @@
 package com.eventusgest.modelo;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.util.Base64;
 import android.widget.Toast;
 
@@ -15,11 +13,11 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.eventusgest.R;
+import com.eventusgest.listeners.AccessPointListener;
 import com.eventusgest.listeners.CredentialListener;
 import com.eventusgest.listeners.EventUserListener;
 import com.eventusgest.listeners.LoginListener;
 import com.eventusgest.utils.CredentialJsonParser;
-import com.eventusgest.utils.EventJsonParser;
 import com.eventusgest.utils.Utility;
 
 import org.json.JSONArray;
@@ -40,10 +38,12 @@ public class SingletonGestor {
     private String mUrlAPICredential = "http://192.168.1.107:8080/backend/web/api/credential";
     private String UrlAPI = "http://192.168.1.107:8080/";
     private String APIPathUserEvents = "backend/web/api/event/user/";
+    private String APIPathAccessPointEvent = "backend/web/api/accesspoint/event/";
     private static RequestQueue volleyQueue;
     private CredentialListener credentialListener;
     private LoginListener loginListener;
     private EventUserListener eventUserListener;
+    private AccessPointListener accessPointListener;
     private String authKey;
 
     private ArrayList<Movement> movements;
@@ -54,6 +54,10 @@ public class SingletonGestor {
             instance = new SingletonGestor(context);
         }
         return instance;
+    }
+
+    public void setAccessPointListener(AccessPointListener accessPointListener) {
+        this.accessPointListener = accessPointListener;
     }
 
     public void setCredentialListener(CredentialListener credentialListener) {
@@ -134,8 +138,8 @@ public class SingletonGestor {
         }
     }
 
-    public void getUserEventsAPI(final Context context, String username) {
-        String url = UrlAPI + APIPathUserEvents + username;
+    public void getUserEventsAPI(final Context context, String event) {
+        String url = UrlAPI + APIPathAccessPointEvent + event;
         if (!Utility.hasInternetConnection(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
         } else {
@@ -144,6 +148,35 @@ public class SingletonGestor {
                 public void onResponse(JSONArray response) {
                     if(eventUserListener != null)
                         eventUserListener.onGetEvents(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put("Content-Type", "application/json; charset=UTF-8");
+                    headers.put("Authorization", "Basic " + authKey);
+                    return headers;
+                }
+            };
+            volleyQueue = Volley.newRequestQueue(context);
+            volleyQueue.add(req);
+        }
+    }
+
+    public void getAccessPointsAPI(final Context context, String username) {
+        String url = UrlAPI + APIPathUserEvents + username;
+        if (!Utility.hasInternetConnection(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+        } else {
+            JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    if(accessPointListener != null)
+                        accessPointListener.onGetAccessPoints(response);
                 }
             }, new Response.ErrorListener() {
                 @Override
