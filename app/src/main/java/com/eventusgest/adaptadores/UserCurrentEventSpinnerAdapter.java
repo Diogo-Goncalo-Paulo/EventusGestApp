@@ -6,10 +6,16 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.eventusgest.modelo.SingletonGestor;
+
 public class UserCurrentEventSpinnerAdapter extends Fragment implements AdapterView.OnItemSelectedListener {
+
+
+
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+        SingletonGestor.getInstance(view.getContext()).getUserEventsAPI(getActivity(), "pixa");
+        
         Toast.makeText(view.getContext(), adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_SHORT).show();
     }
 
