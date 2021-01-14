@@ -2,6 +2,7 @@ package com.eventusgest.modelo;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.util.Base64;
 import android.widget.Toast;
 
@@ -33,8 +34,8 @@ public class SingletonGestor {
     private static SingletonGestor instance = null;
     private ArrayList<Credential> credentials;
     private CredentialDBHelper credentialsDB = null;
-    private String mUrlAPIUser = "http://192.168.1.68:8080/backend/web/api/user/username/";
-    private String mUrlAPICredential = "http://192.168.1.68:8080/backend/web/api/credential";
+    private String mUrlAPIUser = "http://192.168.1.107:8080/backend/web/api/user/username/";
+    private String mUrlAPICredential = "http://192.168.1.107:8080/backend/web/api/credential";
     private static RequestQueue volleyQueue;
     private CredentialListener credentialListener;
     private LoginListener loginListener;
@@ -98,7 +99,7 @@ public class SingletonGestor {
             JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, mUrlAPICredential, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
-                    credentials = CredentialJsonParser.parserJsonCredential(response);
+                    credentials = CredentialJsonParser.parserJsonCredentials(response);
                     addCredentialsDB(credentials);
 
                     if (credentialListener != null) {
@@ -108,7 +109,7 @@ public class SingletonGestor {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "bruh", Toast.LENGTH_SHORT).show();
                 }
             }) {
                 public Map<String, String> getHeaders() throws AuthFailureError {

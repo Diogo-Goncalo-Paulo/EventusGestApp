@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         User u = UserJsonParser.parserJsonUser(response);
 
         String credentials = username + ":" + password;
-        String base64EncodedCredentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+        base64EncodedCredentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
 
         if (username != null) {
             SharedPreferences sharedPrefUser = getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);

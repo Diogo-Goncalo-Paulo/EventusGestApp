@@ -1,6 +1,7 @@
 package com.eventusgest.adaptadores;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.eventusgest.R;
 import com.eventusgest.modelo.Credential;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -20,6 +22,7 @@ public class CredentialListAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<Credential> credentials;
+    private String mUrlAPI = "http://192.168.1.107:8080";
 
     public CredentialListAdapter(Context context, ArrayList<Credential> credentials) {
         this.context = context;
@@ -61,24 +64,23 @@ public class CredentialListAdapter extends BaseAdapter {
     }
 
     private class ViewHolderList {
-        private TextView tvUCID, tvAccessPoint, tvEntityName;
+        private TextView tvUCID, tvCarrierType, tvEntityName;
         private ImageView ivCarrierImg;
 
         public ViewHolderList(View view) {
             ivCarrierImg = view.findViewById(R.id.ivImage);
             tvUCID = view.findViewById(R.id.tvUCID);
-            tvAccessPoint = view.findViewById(R.id.tvAccessPoint);
+            tvCarrierType = view.findViewById(R.id.tvCarrierType1);
             tvEntityName = view.findViewById(R.id.tvEntityName2);
         }
 
         public void update(Credential credential) {
             tvUCID.setText(credential.getCarrierName() == null ? credential.getUcid() : credential.getCarrierName());
-            tvAccessPoint.setText(credential.getCarrierType());
+            tvCarrierType.setText(credential.getCarrierType() == null ? "Sem carregador" : credential.getCarrierType());
             tvEntityName.setText(credential.getEntityName());
-            Glide.with(context)
-                    .load(credential.getCarrierPhoto())
-                    .placeholder(R.drawable.defaultuser)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+
+            Picasso.get()
+                    .load(mUrlAPI + credential.getCarrierPhoto())
                     .into(ivCarrierImg);
         }
     }
