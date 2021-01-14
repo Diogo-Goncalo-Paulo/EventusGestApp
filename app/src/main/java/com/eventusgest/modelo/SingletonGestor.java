@@ -109,7 +109,7 @@ public class SingletonGestor {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, "bruh", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }) {
                 public Map<String, String> getHeaders() throws AuthFailureError {
@@ -141,7 +141,6 @@ public class SingletonGestor {
                     JSONArray errors = data.getJSONArray("errors");
                     JSONObject jsonMessage = errors.getJSONObject(0);
                     String message = jsonMessage.getString("message");
-                    //Log.e(message);
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                 } catch (UnsupportedEncodingException | JSONException e) {
                     e.printStackTrace();
