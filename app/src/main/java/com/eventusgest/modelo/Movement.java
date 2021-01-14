@@ -6,14 +6,15 @@ public class Movement {
 
     private int id, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser,time;
 
-    public Movement(int id, int idCredential, int idAccessPoint, int idAreaFrom, int idAreaTo, int idUser, int time) {
+    public Movement(int id,int time, int idCredential, int idAccessPoint, int idAreaFrom, int idAreaTo, int idUser) {
         this.id = id;
+        this.time = time;
         this.idCredential = idCredential;
         this.idAccessPoint = idAccessPoint;
         this.idAreaFrom = idAreaFrom;
         this.idAreaTo = idAreaTo;
         this.idUser = idUser;
-        this.time = time;
+
     }
 
     public int getId() {
