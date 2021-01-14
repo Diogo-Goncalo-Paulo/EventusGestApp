@@ -124,11 +124,13 @@ public class SingletonGestor {
     }
 
     public void loginAPI(final String username, final String password, final Context context) {
+        String credentials = username + ":" + password;
+        final String base64EncodedCredentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
         StringRequest req = new StringRequest(Request.Method.GET, mUrlAPIUser + username, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if(loginListener != null)
-                    loginListener.onValidateLogin(username, password, response);
+                    loginListener.onValidateLogin(username, password, response, base64EncodedCredentials);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -148,8 +150,6 @@ public class SingletonGestor {
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                String credentials = username + ":" + password;
-                String base64EncodedCredentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json; charset=UTF-8");
                 headers.put("Authorization", "Basic " + base64EncodedCredentials);
@@ -166,6 +166,11 @@ public class SingletonGestor {
         volleyQueue = Volley.newRequestQueue(context);
         volleyQueue.add(req);
     }
+
+    public void loginOffline() {
+
+    }
+
     public Movement getMovement (int id) {
         for (Movement c : movements)
             if(c.getId() == id)

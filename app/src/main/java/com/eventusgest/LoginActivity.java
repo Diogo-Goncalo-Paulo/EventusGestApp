@@ -58,11 +58,11 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     }
 
     private boolean isUsernameValid(String username) {
-        return username == null;
+        return username != null;
     }
 
     @Override
-    public void onValidateLogin(String username, String password, String response) {
+    public void onValidateLogin(String username, String password, String response, String base64EncodedCredentials) {
         User u = UserJsonParser.parserJsonUser(response);
 
         if (username != null) {
@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             editor.putInt(MainActivity.USER_ID, u.getId());
             editor.putString(MainActivity.USERNAME, u.getUsername());
             editor.putString(MainActivity.DISPLAYNAME, u.getDisplayName());
+            editor.putString(MainActivity.API_ACCESS, base64EncodedCredentials);
             editor.putInt(MainActivity.CURRENT_EVENT, u.getCurrentEvent());
             editor.putString(MainActivity.CURRENT_EVENT_NAME, u.getEventName());
             editor.putInt(MainActivity.ACCESS_POINT, u.getAccessPoint());
