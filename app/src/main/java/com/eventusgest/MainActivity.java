@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.eventusgest.modelo.SingletonGestor;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -107,13 +106,14 @@ NavigationView.OnNavigationItemSelectedListener {
 
         switch (item .getItemId()) {
             case R.id.nav_movimentos:
-                fragment = new CredentialFragment();
                 setTitle(item.getTitle());
                 break;
             case R.id.nav_credenciais:
+                fragment = new CredentialFragment();
                 setTitle(item.getTitle());
                 break;
             case R.id.nav_settings:
+                fragment = new SettingsFragment();
                 setTitle(item.getTitle());
                 break;
             case R.id.nav_logout:

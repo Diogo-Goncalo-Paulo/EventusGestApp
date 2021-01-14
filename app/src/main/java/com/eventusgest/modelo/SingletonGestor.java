@@ -1,7 +1,6 @@
 package com.eventusgest.modelo;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Base64;
 import android.widget.Toast;
 
@@ -13,11 +12,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.eventusgest.MainActivity;
 import com.eventusgest.R;
 import com.eventusgest.listeners.CredentialListener;
 import com.eventusgest.listeners.LoginListener;
 import com.eventusgest.utils.CredentialJsonParser;
+import com.eventusgest.utils.EventJsonParser;
 import com.eventusgest.utils.Utility;
 
 import org.json.JSONArray;
@@ -32,9 +31,12 @@ import java.util.Map;
 public class SingletonGestor {
     private static SingletonGestor instance = null;
     private ArrayList<Credential> credentials;
+    private String[] events;
     private CredentialDBHelper credentialsDB = null;
     private String mUrlAPIUser = "http://192.168.1.68:8080/backend/web/api/user/username/";
     private String mUrlAPICredential = "http://192.168.1.68:8080/backend/web/api/credential";
+    private String UrlAPI = "http://192.168.1.68:8080";
+    private String APIPathUserEvents = "/backend/web/api/event/user/";
     private static RequestQueue volleyQueue;
     private CredentialListener credentialListener;
     private LoginListener loginListener;
@@ -122,6 +124,44 @@ public class SingletonGestor {
         }
     }
 
+    public String[] getUserEventsAPI(final Context context, String username) {
+        String url = UrlAPI + APIPathUserEvents + username;
+        if (!Utility.hasInternetConnection(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+        } else {
+            JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    System.out.println("JAVA É MERDA!");
+                    events = EventJsonParser.parserJsonEventNames(response);
+                    System.out.println(events);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    System.out.println("JAVA BUÉ É MERDA!");
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put("Content-Type", "application/json; charset=UTF-8");
+                    headers.put("Authorization", "Basic " + authKey);
+                    return headers;
+                }
+            };
+            volleyQueue.add(req);
+
+        }
+        System.out.println(events);
+        return events;
+    }
+
+    public String[] getUserEvents(Context context) {
+        getUserEventsAPI(context, "gocaspro13");
+        return events;
+    }
+
     public void loginAPI(final String username, final String password, final Context context) {
         String credentials = username + ":" + password;
         final String base64EncodedCredentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
@@ -166,10 +206,6 @@ public class SingletonGestor {
         };
         volleyQueue = Volley.newRequestQueue(context);
         volleyQueue.add(req);
-    }
-
-    public void loginOffline() {
-
     }
 
     public Movement getMovement (int id) {
