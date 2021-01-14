@@ -1,7 +1,5 @@
 package com.eventusgest;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,14 +8,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.eventusgest.listeners.CredentialListener;
 import com.eventusgest.listeners.LoginListener;
 import com.eventusgest.modelo.SingletonGestor;
 import com.eventusgest.modelo.User;
-import com.eventusgest.utils.CredentialJsonParser;
 import com.eventusgest.utils.UserJsonParser;
+import com.eventusgest.utils.Utility;
 
-import org.json.JSONException;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity implements LoginListener {
     public EditText etUsername;
@@ -38,11 +35,30 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         String username = etUsername.getText().toString();
         String password = etPassword.getText().toString();
 
-        if (!CredentialJsonParser.isConnectionInternet(this)) {
+        if (!isUsernameValid(username)) {
+            etUsername.setError(getString(R.string.usename_invalido));
+            return;
+        }
+        if (!isPasswordValid(password)) {
+            etPassword.setError(getString(R.string.password_invalida));
+            return;
+        }
+
+        if (!Utility.hasInternetConnection(this)) {
             Toast.makeText(this, R.string.noInternet, Toast.LENGTH_SHORT).show();
         } else {
             SingletonGestor.getInstance(getApplicationContext()).loginAPI(username, password, getApplicationContext());
         }
+    }
+
+    private boolean isPasswordValid(String password) {
+        if (password == null)
+            return false;
+        return password.length() >=8;
+    }
+
+    private boolean isUsernameValid(String username) {
+        return username == null;
     }
 
     @Override

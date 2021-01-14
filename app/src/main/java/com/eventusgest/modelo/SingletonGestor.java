@@ -16,9 +16,13 @@ import com.eventusgest.R;
 import com.eventusgest.listeners.CredentialListener;
 import com.eventusgest.listeners.LoginListener;
 import com.eventusgest.utils.CredentialJsonParser;
+import com.eventusgest.utils.Utility;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +31,8 @@ public class SingletonGestor {
     private static SingletonGestor instance = null;
     private ArrayList<Credential> credentials;
     private CredentialDBHelper credentialsDB = null;
-    private String mUrlAPIUser = "http://192.168.1.68/eventusgest/backend/web/api/user/username/";
-    private String mUrlAPICredential = "http://192.168.1.68/eventusgest/backend/web/api/credential";
+    private String mUrlAPIUser = "http://192.168.1.68:8080/backend/web/api/user/username/";
+    private String mUrlAPICredential = "http://192.168.1.68:8080/backend/web/api/credential";
     private static RequestQueue volleyQueue;
     private CredentialListener credentialListener;
     private LoginListener loginListener;
@@ -96,7 +100,7 @@ public class SingletonGestor {
     }
 
     public void getAllCredentialsApi(final Context context) {
-        if (!CredentialJsonParser.isConnectionInternet(context)) {
+        if (!Utility.hasInternetConnection(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
         } else {
             JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, mUrlAPICredential, null, new Response.Listener<JSONArray>() {
@@ -129,7 +133,17 @@ public class SingletonGestor {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "y", Toast.LENGTH_SHORT).show();
+                try {
+                    String responseBody = new String(error.networkResponse.data, "utf-8");
+                    JSONObject data = new JSONObject(responseBody);
+                    JSONArray errors = data.getJSONArray("errors");
+                    JSONObject jsonMessage = errors.getJSONObject(0);
+                    String message = jsonMessage.getString("message");
+                    //Log.e(message);
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                } catch (UnsupportedEncodingException | JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }) {
             @Override

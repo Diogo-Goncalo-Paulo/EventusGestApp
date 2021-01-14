@@ -16,4 +16,7 @@
     <string name="ucid">UCID</string>
     <string name="noInternet">Sem internet</string>
     <string name="invalid_login">Username ou password errados.</string>
+    <string name="eventusgest">EventusGest</string>
+    <string name="usename_invalido">Username Invalido</string>
+    <string name="password_invalida">Password Invalida</string>
 </resources>
