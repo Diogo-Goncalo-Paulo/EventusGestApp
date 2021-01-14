@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class CredentialJsonParser {
-    public static ArrayList<Credential> parserJsonCredential(JSONArray response) {
+    public static ArrayList<Credential> parserJsonCredentials(JSONArray response) {
         ArrayList<Credential> credentials = new ArrayList<>();
 
         if (response != null) {
@@ -23,21 +23,32 @@ public class CredentialJsonParser {
                     int idCurrentArea = credential.getInt("idCurrentArea");
                     int flagged = credential.getInt("flagged");
                     int blocked = credential.getInt("blocked");
-                    JSONObject carrier = new JSONObject(credential.getString("carrier"));
-                    String carrierName = carrier.getString("name");
-                    String carrierPhoto = carrier.getString("photo");
-                    JSONObject carrierType = new JSONObject(carrier.getString("carrierType"));
-                    String carrierTypeName = carrierType.getString("name");
+
+                    String carrierName = null;
+                    String carrierPhoto = null;
+                    String carrierInfo = null;
+                    String carrierTypeName = null;
+
+                    if(credential.getString("carrier") != "null") {
+                        JSONObject carrier = new JSONObject(credential.getString("carrier"));
+                        carrierName = carrier.getString("name");
+                        carrierPhoto = carrier.getString("photo");
+                        carrierInfo = carrier.getString("info");
+                        JSONObject carrierType = new JSONObject(carrier.getString("carrierType"));
+                        carrierTypeName = carrierType.getString("name");
+                    }
+
                     JSONObject entity = new JSONObject(credential.getString("entity"));
                     String entityName = entity.getString("name");
 
-                    Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName);
+                    Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName, carrierInfo);
                     credentials.add(c);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         }
+
         return credentials;
     }
 
@@ -53,15 +64,25 @@ public class CredentialJsonParser {
             int idCurrentArea = credential.getInt("idCurrentArea");
             int flagged = credential.getInt("flagged");
             int blocked = credential.getInt("blocked");
-            JSONObject carrier = new JSONObject(credential.getString("carrier"));
-            String carrierName = carrier.getString("name");
-            String carrierPhoto = carrier.getString("photo");
-            JSONObject carrierType = new JSONObject(carrier.getString("carrierType"));
-            String carrierTypeName = carrierType.getString("name");
+
+            String carrierName = null;
+            String carrierPhoto = null;
+            String carrierInfo = null;
+            String carrierTypeName = null;
+
+            if(credential.getString("carrier") != "null") {
+                JSONObject carrier = new JSONObject(credential.getString("carrier"));
+                carrierName = carrier.getString("name");
+                carrierPhoto = carrier.getString("photo");
+                carrierInfo = carrier.getString("info");
+                JSONObject carrierType = new JSONObject(carrier.getString("carrierType"));
+                carrierTypeName = carrierType.getString("name");
+            }
+
             JSONObject entity = new JSONObject(credential.getString("entity"));
             String entityName = entity.getString("name");
 
-            auxCredential = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierPhoto, entityName, carrierTypeName);
+            Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName, carrierInfo);
         } catch (JSONException e) {
             e.printStackTrace();
         }
