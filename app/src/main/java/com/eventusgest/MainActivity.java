@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.eventusgest.modelo.SingletonGestor;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,7 @@ NavigationView.OnNavigationItemSelectedListener {
     public static final String ACCESS_POINT = "ACCESS_POINT";
     public static final String ACCESS_POINT_NAME = "ACCESS_POINT_NAME";
     public static final String USER_ROLE = "USER_ROLE";
+    public static final String AUTH = "AUTH";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

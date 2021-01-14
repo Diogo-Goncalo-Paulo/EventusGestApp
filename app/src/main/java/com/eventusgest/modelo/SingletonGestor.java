@@ -1,6 +1,7 @@
 package com.eventusgest.modelo;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Base64;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.eventusgest.MainActivity;
 import com.eventusgest.R;
 import com.eventusgest.listeners.CredentialListener;
 import com.eventusgest.listeners.LoginListener;
@@ -27,11 +29,12 @@ public class SingletonGestor {
     private static SingletonGestor instance = null;
     private ArrayList<Credential> credentials;
     private CredentialDBHelper credentialsDB = null;
-    private String mUrlAPIUser = "http://192.168.1.68/eventusgest/backend/web/api/user/username/";
-    private String mUrlAPICredential = "http://192.168.1.68/eventusgest/backend/web/api/credential";
+    private String mUrlAPIUser = "http://192.168.1.107/eventusgest/backend/web/api/user/username/";
+    private String mUrlAPICredential = "http://192.168.1.107/eventusgest/backend/web/api/credential";
     private static RequestQueue volleyQueue;
     private CredentialListener credentialListener;
     private LoginListener loginListener;
+    private String authKey;
 
     private ArrayList<Movement> movements;
     private MovementDBHelper movementsDB = null;
@@ -52,21 +55,10 @@ public class SingletonGestor {
     }
 
     public SingletonGestor(Context context) {
-        //gerarFakeData();
         credentials = new ArrayList<>();
         credentialsDB = new CredentialDBHelper(context);
         movements = new ArrayList<>();
         movementsDB = new MovementDBHelper(context);
-    }
-
-    private void gerarFakeData () {
-        credentials = new ArrayList<>();
-
-        credentials.add(new Credential(1, 1, 1, 1, 0, 0, "dasqwe21"));
-        credentials.add(new Credential(2, 1, 1, 1, 0, 0, "qqqqwe21"));
-        credentials.add(new Credential(3, 1, 1, 1, 0, 0, "ewqs23fd"));
-        credentials.add(new Credential(4, 1, 1, 1, 0, 0, "zserf234"));
-        credentials.add(new Credential(5, 1, 1, 1, 0, 0, "vcxz1234"));
     }
 
     public Credential getCredential (int id) {
@@ -114,7 +106,14 @@ public class SingletonGestor {
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            });
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put("Content-Type", "application/json; charset=UTF-8");
+                    headers.put("Authorization", "Basic " + authKey);
+                    return headers;
+                }
+            };
             volleyQueue.add(req);
         }
     }
@@ -135,10 +134,10 @@ public class SingletonGestor {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 String credentials = username + ":" + password;
-                String base64EncodedCredentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+                authKey = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json; charset=UTF-8");
-                headers.put("Authorization", "Basic " + base64EncodedCredentials);
+                headers.put("Authorization", "Basic " + authKey);
                 return headers;
             }
             @Override

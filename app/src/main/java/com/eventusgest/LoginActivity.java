@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -49,6 +50,9 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     public void onValidateLogin(String username, String password, String response) {
         User u = UserJsonParser.parserJsonUser(response);
 
+        String credentials = username + ":" + password;
+        String base64EncodedCredentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+
         if (username != null) {
             SharedPreferences sharedPrefUser = getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPrefUser.edit();
@@ -57,10 +61,13 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             editor.putString(MainActivity.DISPLAYNAME, u.getDisplayName());
             editor.putInt(MainActivity.CURRENT_EVENT, u.getCurrentEvent());
             editor.putString(MainActivity.CURRENT_EVENT_NAME, u.getEventName());
+            editor.putString(MainActivity.AUTH, base64EncodedCredentials);
             editor.putInt(MainActivity.ACCESS_POINT, u.getAccessPoint());
             editor.putString(MainActivity.ACCESS_POINT_NAME, u.getAccessPointName());
             editor.putString(MainActivity.USER_ROLE, u.getRole());
             editor.apply();
+
+
 
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
