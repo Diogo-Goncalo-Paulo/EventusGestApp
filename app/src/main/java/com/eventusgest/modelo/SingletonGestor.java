@@ -22,6 +22,7 @@ import com.eventusgest.listeners.CredentialFlagBlockListener;
 import com.eventusgest.listeners.CredentialListener;
 import com.eventusgest.listeners.EventUserListener;
 import com.eventusgest.listeners.LoginListener;
+import com.eventusgest.listeners.MovementListener;
 import com.eventusgest.utils.CredentialJsonParser;
 import com.eventusgest.utils.Utility;
 
@@ -42,14 +43,15 @@ public class SingletonGestor {
     private Credential credential;
     private String[] events;
     private CredentialDBHelper credentialsDB = null;
-    private String mUrlAPIUser = "http://192.168.1.107:8080/backend/web/api/user/username/";
-    private String mUrlAPICredential = "http://192.168.1.107:8080/backend/web/api/credential";
-    private String UrlAPI = "http://192.168.1.107:8080/";
+    private String mUrlAPIUser = "http://192.168.1.97:8080/backend/web/api/user/username/";
+    private String mUrlAPICredential = "http://192.168.1.97:8080/backend/web/api/credential";
+    private String UrlAPI = "http://192.168.1.97:8080/";
     private String APIPathUserEvents = "backend/web/api/event/user/";
     private String APIPathAccessPointEvent = "backend/web/api/accesspoint/event/";
     private static RequestQueue volleyQueue;
     private CredentialListener credentialListener;
     private CredentialFlagBlockListener credentialFlagBlockListener;
+    private MovementListener movementListener;
     private LoginListener loginListener;
     private EventUserListener eventUserListener;
     private AccessPointListener accessPointListener;
@@ -72,6 +74,10 @@ public class SingletonGestor {
 
     public void setCredentialListener(CredentialListener credentialListener) {
         this.credentialListener = credentialListener;
+    }
+
+    public void setMovementListener(MovementListener movementListener) {
+        this.movementListener = movementListener;
     }
 
     public void setLoginListener(LoginListener loginListener) {
