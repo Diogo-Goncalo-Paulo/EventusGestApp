@@ -54,6 +54,7 @@ public class SingletonGestor {
     public static synchronized SingletonGestor getInstance(Context context) {
         if (instance == null) {
             instance = new SingletonGestor(context);
+            volleyQueue = Volley.newRequestQueue(context);
         }
         return instance;
     }
@@ -128,8 +129,7 @@ public class SingletonGestor {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
-                    //System.out.println(error.getMessage());
+                    //Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }) {
                 public Map<String, String> getHeaders() throws AuthFailureError {
@@ -139,13 +139,12 @@ public class SingletonGestor {
                     return headers;
                 }
             };
-            volleyQueue = Volley.newRequestQueue(context);
             volleyQueue.add(req);
         }
     }
 
-    public void getUserEventsAPI(final Context context, String event) {
-        String url = UrlAPI + APIPathAccessPointEvent + event;
+    public void getUserEventsAPI(final Context context, String username) {
+        String url = UrlAPI + APIPathUserEvents + username;
         if (!Utility.hasInternetConnection(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
         } else {
@@ -158,7 +157,7 @@ public class SingletonGestor {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }) {
                 public Map<String, String> getHeaders() throws AuthFailureError {
@@ -168,13 +167,12 @@ public class SingletonGestor {
                     return headers;
                 }
             };
-            volleyQueue = Volley.newRequestQueue(context);
             volleyQueue.add(req);
         }
     }
 
-    public void getAccessPointsAPI(final Context context, String username) {
-        String url = UrlAPI + APIPathUserEvents + username;
+    public void getAccessPointsAPI(final Context context, String event) {
+        String url = UrlAPI + APIPathAccessPointEvent + event;
         if (!Utility.hasInternetConnection(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
         } else {
@@ -182,7 +180,7 @@ public class SingletonGestor {
                 @Override
                 public void onResponse(JSONArray response) {
                     if(accessPointListener != null)
-                        accessPointListener.onGetAccessPoints(response);
+                        accessPointListener.onGetAccessPoints(response, context);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -197,7 +195,6 @@ public class SingletonGestor {
                     return headers;
                 }
             };
-            volleyQueue = Volley.newRequestQueue(context);
             volleyQueue.add(req);
         }
     }
@@ -243,7 +240,6 @@ public class SingletonGestor {
                 return params;
             }
         };
-        volleyQueue = Volley.newRequestQueue(context);
         volleyQueue.add(req);
     }
 
