@@ -1,7 +1,6 @@
 package com.eventusgest.adaptadores;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.eventusgest.R;
 import com.eventusgest.modelo.Credential;
 import com.squareup.picasso.Picasso;
@@ -22,7 +19,7 @@ public class CredentialListAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<Credential> credentials;
-    private String mUrlAPI = "http://192.168.1.107:8080";
+    private String mUrlAPI = "http://192.168.1.68:8080";
 
     public CredentialListAdapter(Context context, ArrayList<Credential> credentials) {
         this.context = context;

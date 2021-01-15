@@ -47,19 +47,64 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
         if (!Utility.hasInternetConnection(this)) {
             Toast.makeText(this, R.string.noInternet, Toast.LENGTH_SHORT).show();
+            offlineLogin(username, password);
         } else {
+            checkAPIUrl();
             SingletonGestor.getInstance(getApplicationContext()).loginAPI(username, password, getApplicationContext());
         }
     }
 
+    /**
+     * Checks if the api url is defined in shared preferences,
+     * if not defines it.
+     */
+    private void checkAPIUrl() {
+        SharedPreferences sharedPrefUser = getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
+        if (sharedPrefUser != null) {
+            String apiUrl = sharedPrefUser.getString(MainActivity.API_URL, MainActivity.API_URL);
+            if (apiUrl == null) {
+                SharedPreferences.Editor editor = sharedPrefUser.edit();
+                editor.putString(MainActivity.API_URL, "http://192.168.1.68:8080/");
+                editor.apply();
+            }
+        }
+    }
+
+    /**
+     * Check if password is null and if it has the minimum length of 8
+     * @param password The password to check
+     * @return boolean
+     */
     private boolean isPasswordValid(String password) {
         if (password == null)
             return false;
         return password.length() >=8;
     }
 
+    /**
+     * Check if username is null
+     * @param username The username to check
+     * @return boolean
+     */
     private boolean isUsernameValid(String username) {
         return username != null;
+    }
+
+    private void offlineLogin(String username, String password) {
+        SharedPreferences sharedPrefUser = getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
+        if (sharedPrefUser != null) {
+            String auth = sharedPrefUser.getString(MainActivity.AUTH, MainActivity.AUTH);
+            String base64EncodedCredentials = "";
+            if (auth != null) {
+                String credentials = username + ":" + password;
+                base64EncodedCredentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+                if (auth.equals(base64EncodedCredentials)) {
+                    enterApp();
+                } else {
+                    Toast.makeText(this, R.string.invalid_login, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
     @Override
@@ -83,13 +128,18 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             editor.putString(MainActivity.USER_ROLE, u.getRole());
             editor.apply();
 
-
-
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            enterApp();
         } else {
             Toast.makeText(this, R.string.invalid_login, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Starts the Main Activity
+     */
+    private void enterApp() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

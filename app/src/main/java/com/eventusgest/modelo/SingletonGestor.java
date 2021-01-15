@@ -43,10 +43,10 @@ public class SingletonGestor {
     private ArrayList<Credential> credentials;
     private String[] events;
     private CredentialDBHelper credentialsDB = null;
-    private String mUrlAPIUser = "http://192.168.1.107:8080/backend/web/api/user/username/";
-    private String mUrlAPICredential = "http://192.168.1.107:8080/backend/web/api/credential";
-    private String mUrlAPIMovements = "http://192.168.1.107:8080/backend/web/api/movement";
-    private String UrlAPI = "http://192.168.1.107:8080/";
+    private String mUrlAPIUser = "http://192.168.1.68:8080/backend/web/api/user/username/";
+    private String mUrlAPICredential = "http://192.168.1.68:8080/backend/web/api/credential";
+    private String mUrlAPIMovements = "http://192.168.1.68:8080/backend/web/api/movement";
+    private String UrlAPI = "http://192.168.1.68:8080/";
     private String APIPathUserEvents = "backend/web/api/event/user/";
     private String APIPathAccessPointEvent = "backend/web/api/accesspoint/event/";
     private static RequestQueue volleyQueue;
@@ -156,7 +156,8 @@ public class SingletonGestor {
             final JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, mUrlAPICredential + "/event/" + currentevent, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
-                    credentials = CredentialJsonParser.parserJsonCredentials(response);
+                    /*redentials = CredentialJsonParser.parserJsonCredentials(response);
+                    addCredentialsDB(credentials);*/
 
                     addCredentialsDB(credentials);
 

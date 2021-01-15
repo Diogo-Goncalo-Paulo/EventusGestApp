@@ -5,12 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eventusgest.R;
 import com.eventusgest.modelo.Movement;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -19,7 +17,7 @@ public class MovementListAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<Movement> movements;
-    private String mUrlAPI = "http://192.168.1.107:8080";
+    private String mUrlAPI = "http://192.168.1.68:8080";
 
     public MovementListAdapter(Context context, ArrayList<Movement> credentials) {
         this.context = context;
@@ -71,9 +69,19 @@ public class MovementListAdapter extends BaseAdapter {
         }
 
         public void update(Movement movement) {
-            /*tvUCID.setText();
-            tvCarrierType.setText(credential.getCarrierType() == null ? "Sem carregador" : credential.getCarrierType());
-            tvEntityName.setText(credential.getEntityName());
+//            tvUCID.setText();
+//            tvCarrierType.setText(credential.getCarrierType() == null ? "Sem carregador" : credential.getCarrierType());
+//            tvEntityName.setText(credential.getEntityName());
+//
+//            if(credential.getCarrierPhoto() != null) {
+//                Picasso.get()
+//                        .load(mUrlAPI + credential.getCarrierPhoto())
+//                        .into(ivCarrierImg);
+//            } else {
+//                Picasso.get()
+//                        .load(R.drawable.defaultuser)
+//                        .into(ivCarrierImg);
+//            }
 
             if(credential.getCarrierPhoto() != null) {
                 Picasso.get()
@@ -83,7 +91,7 @@ public class MovementListAdapter extends BaseAdapter {
                 Picasso.get()
                         .load(R.drawable.defaultuser)
                         .into(ivCarrierImg);
-            }*/
+            }
 
         }
     }

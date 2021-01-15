@@ -16,9 +16,9 @@ import com.eventusgest.modelo.SingletonGestor;
 import com.eventusgest.utils.EventJsonParser;
 import com.eventusgest.utils.Utility;
 
-import androidx.fragment.app.Fragment;
-
 import org.json.JSONArray;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +36,6 @@ public class SettingsFragment extends Fragment implements EventUserListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         SingletonGestor.getInstance(getContext().getApplicationContext()).setEventUserListener(this);
@@ -50,10 +49,15 @@ public class SettingsFragment extends Fragment implements EventUserListener {
             SingletonGestor.getInstance(getActivity().getApplicationContext()).getUserEventsAPI(getActivity().getApplicationContext(), username);
         }
 
+        String apiUrl = sharedPrefUser.getString(MainActivity.API_URL, MainActivity.API_URL);
+        if (apiUrl == null) {
+//            SharedPreferences.Editor editor = sharedPrefUser.edit();
+//            editor.putString(MainActivity.API_URL, "http://192.168.1.68:8080/");
+//            editor.apply();
+        }
+
         return view;
     }
-
-
 
     @Override
     public void onGetEvents(JSONArray events) {
@@ -71,9 +75,7 @@ public class SettingsFragment extends Fragment implements EventUserListener {
                 eventss
         );
 
-        // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
         spinner.setSelection(adapter.getPosition(event));

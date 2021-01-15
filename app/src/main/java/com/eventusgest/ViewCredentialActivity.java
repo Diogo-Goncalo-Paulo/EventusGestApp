@@ -1,10 +1,5 @@
 package com.eventusgest;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatImageButton;
-
-import android.graphics.LightingColorFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,13 +7,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eventusgest.listeners.CredentialFlagBlockListener;
-import com.eventusgest.listeners.CredentialListener;
 import com.eventusgest.modelo.Credential;
 import com.eventusgest.modelo.SingletonGestor;
-import com.eventusgest.utils.Utility;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
 
 public class ViewCredentialActivity extends AppCompatActivity implements CredentialFlagBlockListener {
 
@@ -29,7 +23,7 @@ public class ViewCredentialActivity extends AppCompatActivity implements Credent
     private Button btnFlag;
     private AppCompatImageButton btnBlock;
     private ImageView profilePicture;
-    private String mUrlAPI = "http://192.168.1.107:8080";
+    private String mUrlAPI = "http://192.168.1.68:8080";
     private int flag = 0;
 
     @Override

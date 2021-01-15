@@ -18,4 +18,8 @@
     <string name="eventusgest">EventusGest</string>
     <string name="usename_invalido">Username Invalido</string>
     <string name="password_invalida">Password Invalida</string>
+    <string name="ponto_de_acesso">Ponto de Acesso</string>
+    <string name="evento_atual">Evento Atual</string>
+    <string name="op_es_do_utilizador">Opções do Utilizador</string>
+    <string name="op_es_de_desemvolvedor">Opções de Desemvolvedor</string>
 </resources>
