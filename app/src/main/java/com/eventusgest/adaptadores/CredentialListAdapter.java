@@ -76,14 +76,14 @@ public class CredentialListAdapter extends BaseAdapter {
 
         public void update(Credential credential) {
             tvUCID.setText(credential.getCarrierName() == null ? credential.getUcid() : credential.getCarrierName());
-            tvCarrierType.setText(credential.getCarrierType() == null ? "Sem carregador" : credential.getCarrierType());
+            tvCarrierType.setText(credential.getEntityName() == "null" ? "Sem carregador" : credential.getEntityName());
             tvEntityName.setText(credential.getEntityName());
 
-            if(credential.getCarrierType() != null && credential.getCarrierPhoto() != "null") {
+            if(credential.getCarrierType() != null && !credential.getCarrierPhoto().equals("null")) {
                 Picasso.get()
                         .load(mUrlAPI + credential.getCarrierPhoto())
                         .into(ivCarrierImg);
-            } else if (credential.getCarrierType() != null && credential.getCarrierPhoto() == "null") {
+            } else if (credential.getCarrierType() != null && credential.getCarrierPhoto().equals("null")) {
                 Picasso.get()
                         .load(R.drawable.defaultuser)
                         .into(ivCarrierImg);

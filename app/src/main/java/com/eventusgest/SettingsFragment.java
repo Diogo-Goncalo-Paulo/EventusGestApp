@@ -39,7 +39,7 @@ public class SettingsFragment extends Fragment implements EventUserListener {
 
         view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        SingletonGestor.getInstance(getContext()).setEventUserListener(this);
+        SingletonGestor.getInstance(getContext().getApplicationContext()).setEventUserListener(this);
 
         SharedPreferences sharedPrefUser = this.getActivity().getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
         String username = sharedPrefUser.getString(MainActivity.USERNAME, MainActivity.USERNAME);
@@ -47,7 +47,7 @@ public class SettingsFragment extends Fragment implements EventUserListener {
         if (!Utility.hasInternetConnection(getActivity())) {
             Toast.makeText(getContext(), R.string.noInternet, Toast.LENGTH_SHORT).show();
         } else {
-            SingletonGestor.getInstance(getActivity()).getUserEventsAPI(getActivity(), username);
+            SingletonGestor.getInstance(getActivity().getApplicationContext()).getUserEventsAPI(getActivity().getApplicationContext(), username);
         }
 
         return view;

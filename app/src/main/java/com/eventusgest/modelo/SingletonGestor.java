@@ -24,6 +24,7 @@ import com.eventusgest.listeners.EventUserListener;
 import com.eventusgest.listeners.LoginListener;
 import com.eventusgest.listeners.MovementListener;
 import com.eventusgest.utils.CredentialJsonParser;
+import com.eventusgest.utils.MovementJsonParser;
 import com.eventusgest.utils.Utility;
 
 import org.json.JSONArray;
@@ -40,12 +41,12 @@ import static com.eventusgest.MainActivity.CURRENT_EVENT_NAME;
 public class SingletonGestor {
     private static SingletonGestor instance = null;
     private ArrayList<Credential> credentials;
-    private Credential credential;
     private String[] events;
     private CredentialDBHelper credentialsDB = null;
-    private String mUrlAPIUser = "http://192.168.1.97:8080/backend/web/api/user/username/";
-    private String mUrlAPICredential = "http://192.168.1.97:8080/backend/web/api/credential";
-    private String UrlAPI = "http://192.168.1.97:8080/";
+    private String mUrlAPIUser = "http://192.168.1.107:8080/backend/web/api/user/username/";
+    private String mUrlAPICredential = "http://192.168.1.107:8080/backend/web/api/credential";
+    private String mUrlAPIMovements = "http://192.168.1.107:8080/backend/web/api/movement";
+    private String UrlAPI = "http://192.168.1.107:8080/";
     private String APIPathUserEvents = "backend/web/api/event/user/";
     private String APIPathAccessPointEvent = "backend/web/api/accesspoint/event/";
     private static RequestQueue volleyQueue;
@@ -63,7 +64,7 @@ public class SingletonGestor {
     public static synchronized SingletonGestor getInstance(Context context) {
         if (instance == null) {
             instance = new SingletonGestor(context);
-            volleyQueue = Volley.newRequestQueue(context);
+            volleyQueue = Volley.newRequestQueue(context.getApplicationContext());
         }
         return instance;
     }
@@ -100,9 +101,10 @@ public class SingletonGestor {
     }
 
     public Credential getCredential(int id) {
-        for (Credential c : credentials)
-            if (c.getId() == id)
+        for (Credential c : credentialsDB.getAllCredentialsDB())
+            if (c.getId() == id) {
                 return c;
+            }
         return null;
     }
 
@@ -154,8 +156,9 @@ public class SingletonGestor {
             final JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, mUrlAPICredential + "/event/" + currentevent, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
-                    /*redentials = CredentialJsonParser.parserJsonCredentials(response);
-                    addCredentialsDB(credentials);*/
+                    credentials = CredentialJsonParser.parserJsonCredentials(response);
+
+                    addCredentialsDB(credentials);
 
                     if (credentialListener != null) {
                         credentialListener.onRefreshCredentialList(credentials);
@@ -229,6 +232,38 @@ public class SingletonGestor {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     //Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+
+                    headers.put("Authorization", "Basic " + authKey);
+                    return headers;
+                }
+            };
+            volleyQueue.add(req);
+        }
+    }
+
+    public void getAllMovements(final Context context) {
+        String url = UrlAPI + mUrlAPIMovements;
+        if (!Utility.hasInternetConnection(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+        } else {
+            JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    movements = MovementJsonParser.parserJsonMovements(response);
+                    addMovementsDB(movements);
+
+                    if (movementListener != null)
+                        movementListener.onRefreshMovementList(movements);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println(error.getMessage());
                 }
             }) {
                 public Map<String, String> getHeaders() throws AuthFailureError {
@@ -357,8 +392,14 @@ public class SingletonGestor {
         return movements;
     }
 
-    public void addMovementBD(Movement movement) {
+    public void addMovementDB(Movement movement) {
         movementsDB.addMovementDb(movement);
+    }
+
+    public void addMovementsDB(ArrayList<Movement> movements) {
+        movementsDB.removeAllMovements();
+        for (Movement m : movements)
+            addMovementDB(m);
     }
 
     public ArrayList<Movement> getAllMovements() {

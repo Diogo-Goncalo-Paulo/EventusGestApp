@@ -27,7 +27,7 @@ public class UserCurrentEventSpinnerAdapter extends Fragment implements AdapterV
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        SingletonGestor.getInstance(getContext()).setAccessPointListener(this);
+        SingletonGestor.getInstance(view.getContext()).setAccessPointListener(this);
         SingletonGestor.getInstance(view.getContext()).getAccessPointsAPI(view.getContext(), adapterView.getSelectedItem().toString());
 
         SharedPreferences sharedPrefUser = view.getContext().getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
@@ -37,8 +37,6 @@ public class UserCurrentEventSpinnerAdapter extends Fragment implements AdapterV
 
 
         String currentevent = sharedPrefUser.getString(CURRENT_EVENT_NAME, CURRENT_EVENT_NAME);
-        System.out.println(view.getContext());
-
         tvCurrentEvent = (TextView) ((Activity) view.getContext()).findViewById(R.id.tvCurrentEvent);
         tvCurrentEvent.setText(String.format("%s • ", currentevent));
     }

@@ -40,17 +40,17 @@ public class CredentialDBHelper extends SQLiteOpenHelper {
         String sqlCreateTableCredential =
                 "CREATE TABLE " + TABLE_CREDENTIALS + " ( " +
                         ID_CREDENTIAL + " INTEGER PRIMARY KEY, " +
-                        UCID_CREDENTIAL + " TEXT NOT NULL, " +
                         ID_ENTITY_CREDENTIAL + " INTEGER NOT NULL, " +
                         ID_CURRENTAREA_CREDENTIAL + " INTEGER NOT NULL, " +
                         ID_EVENT_CREDENTIAL + " INTEGER NOT NULL, " +
                         FLAGGED_CREDENTIAL + " INTEGER NOT NULL, " +
                         BLOCKED_CREDENTIAL + " INTEGER NOT NULL, " +
+                        UCID_CREDENTIAL + " TEXT NOT NULL, " +
                         CARRIER_NAME + " TEXT, " +
-                        CARRIER_INFO + " TEXT, " +
                         CARRIER_PHOTO + " TEXT, " +
                         ENTITY_NAME + " TEXT, " +
                         CARRIER_TYPE_NAME + " TEXT, " +
+                        CARRIER_INFO + " TEXT, " +
                         QR_CODE + " TEXT); ";
         db.execSQL(sqlCreateTableCredential);
     }
@@ -65,17 +65,17 @@ public class CredentialDBHelper extends SQLiteOpenHelper {
     public Credential addCredentialDb (Credential credential) {
         ContentValues values = new ContentValues();
         values.put(ID_CREDENTIAL, credential.getId());
-        values.put(UCID_CREDENTIAL, credential.getUcid());
         values.put(ID_ENTITY_CREDENTIAL, credential.getIdEntity());
         values.put(ID_CURRENTAREA_CREDENTIAL, credential.getIdCurrentArea());
         values.put(ID_EVENT_CREDENTIAL, credential.getIdEvent());
         values.put(FLAGGED_CREDENTIAL, credential.getFlagged());
         values.put(BLOCKED_CREDENTIAL, credential.getBlocked());
+        values.put(UCID_CREDENTIAL, credential.getUcid());
         values.put(CARRIER_NAME, credential.getCarrierName());
         values.put(CARRIER_PHOTO, credential.getCarrierPhoto());
-        values.put(CARRIER_INFO, credential.getCarrierInfo());
         values.put(ENTITY_NAME, credential.getEntityName());
         values.put(CARRIER_TYPE_NAME, credential.getCarrierType());
+        values.put(CARRIER_INFO, credential.getCarrierInfo());
         values.put(QR_CODE, credential.getQrCode());
 
         long id = this.db.insert(TABLE_CREDENTIALS, null, values);
@@ -95,11 +95,12 @@ public class CredentialDBHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Credential auxCredential = new Credential(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9), cursor.getString(10), cursor.getString(11), cursor.getString(12));
+                Credential auxCredential = new Credential(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getString(6), cursor.getString(7), cursor.getString(10), cursor.getString(8), cursor.getString(9), cursor.getString(11), cursor.getString(12));
                 credentials.add(auxCredential);
             }
             while (cursor.moveToNext());
         }
+
         return credentials;
     }
 }

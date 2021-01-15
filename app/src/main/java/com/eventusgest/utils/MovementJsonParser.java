@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class MovementJsonParser {
-    public static ArrayList<Movement> parserJsonMovement(JSONArray response) {
+    public static ArrayList<Movement> parserJsonMovements(JSONArray response) {
         ArrayList<Movement> movements = new ArrayList<>();
 
         if (response != null) {

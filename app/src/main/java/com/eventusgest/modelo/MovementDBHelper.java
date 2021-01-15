@@ -80,6 +80,10 @@ public class MovementDBHelper extends SQLiteOpenHelper {
         return movement;
     }
 
+    public void removeAllMovements() {
+        this.db.delete(TABLE_MOVEMENTS,null, null);
+    }
+
     public ArrayList<Movement> getAllMovementsDB() {
         ArrayList<Movement> movements = new ArrayList<>();
         Cursor cursor = this.db.query(TABLE_MOVEMENTS, new String[]{ID_MOVEMENT,TIME , ID_CREDENTIAL, ID_ACCESSPOINT, ID_AREA_FROM, ID_AREA_TO, ID_USER}, null, null, null, null, null);

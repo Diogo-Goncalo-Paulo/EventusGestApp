@@ -49,7 +49,6 @@ public class ViewCredentialActivity extends AppCompatActivity implements Credent
         profilePicture = findViewById(R.id.profilePicture);
 
         SingletonGestor.getInstance(getApplicationContext()).setCredentialFlagBlockListener(this);
-
         carregarInfo();
     }
 
@@ -65,11 +64,11 @@ public class ViewCredentialActivity extends AppCompatActivity implements Credent
             btnBlock.setEnabled(false);
         }
 
-        if(credential.getCarrierType() != null && credential.getCarrierPhoto() != "null") {
+        if(credential.getCarrierType() != null && !credential.getCarrierPhoto().equals("null")) {
             Picasso.get()
                     .load(mUrlAPI + credential.getCarrierPhoto())
                     .into(profilePicture);
-        } else if (credential.getCarrierType() != null && credential.getCarrierPhoto() == "null") {
+        } else if (credential.getCarrierType() != null && credential.getCarrierPhoto().equals("null")) {
             Picasso.get()
                     .load(R.drawable.defaultuser)
                     .into(profilePicture);

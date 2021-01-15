@@ -10,8 +10,6 @@ public class UserJsonParser {
     public static User parserJsonUser(String response) {
         User auxUser = null;
 
-        System.out.println();
-
         try {
             JSONObject user = new JSONObject(response);
             int id = user.getInt("id");

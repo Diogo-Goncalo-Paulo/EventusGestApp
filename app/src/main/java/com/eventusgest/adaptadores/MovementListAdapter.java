@@ -71,7 +71,7 @@ public class MovementListAdapter extends BaseAdapter {
         }
 
         public void update(Movement movement) {
-            tvUCID.setText();
+            /*tvUCID.setText();
             tvCarrierType.setText(credential.getCarrierType() == null ? "Sem carregador" : credential.getCarrierType());
             tvEntityName.setText(credential.getEntityName());
 
@@ -83,7 +83,7 @@ public class MovementListAdapter extends BaseAdapter {
                 Picasso.get()
                         .load(R.drawable.defaultuser)
                         .into(ivCarrierImg);
-            }
+            }*/
 
         }
     }
