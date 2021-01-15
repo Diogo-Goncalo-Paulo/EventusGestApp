@@ -1,6 +1,9 @@
 package com.eventusgest.modelo;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Base64;
 import android.widget.Toast;
 
@@ -12,8 +15,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.eventusgest.MainActivity;
 import com.eventusgest.R;
 import com.eventusgest.listeners.AccessPointListener;
+import com.eventusgest.listeners.CredentialFlagBlockListener;
 import com.eventusgest.listeners.CredentialListener;
 import com.eventusgest.listeners.EventUserListener;
 import com.eventusgest.listeners.LoginListener;
@@ -29,9 +34,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.eventusgest.MainActivity.CURRENT_EVENT_NAME;
+
 public class SingletonGestor {
     private static SingletonGestor instance = null;
     private ArrayList<Credential> credentials;
+    private Credential credential;
     private String[] events;
     private CredentialDBHelper credentialsDB = null;
     private String mUrlAPIUser = "http://192.168.1.107:8080/backend/web/api/user/username/";
@@ -41,6 +49,7 @@ public class SingletonGestor {
     private String APIPathAccessPointEvent = "backend/web/api/accesspoint/event/";
     private static RequestQueue volleyQueue;
     private CredentialListener credentialListener;
+    private CredentialFlagBlockListener credentialFlagBlockListener;
     private LoginListener loginListener;
     private EventUserListener eventUserListener;
     private AccessPointListener accessPointListener;
@@ -73,6 +82,10 @@ public class SingletonGestor {
         this.eventUserListener = eventUserListener;
     }
 
+    public void setCredentialFlagBlockListener(CredentialFlagBlockListener credentialFlagBlockListener) {
+        this.credentialFlagBlockListener = credentialFlagBlockListener;
+    }
+
     public SingletonGestor(Context context) {
         credentials = new ArrayList<>();
         credentialsDB = new CredentialDBHelper(context);
@@ -80,9 +93,9 @@ public class SingletonGestor {
         movementsDB = new MovementDBHelper(context);
     }
 
-    public Credential getCredential (int id) {
+    public Credential getCredential(int id) {
         for (Credential c : credentials)
-            if(c.getId() == id)
+            if (c.getId() == id)
                 return c;
         return null;
     }
@@ -92,32 +105,86 @@ public class SingletonGestor {
         return credentials;
     }
 
-    public void addCredentialDB (Credential credential) {
+    public void addCredentialDB(Credential credential) {
         credentialsDB.addCredentialDb(credential);
     }
 
-    public void addCredentialsDB (ArrayList<Credential> credentials) {
+    public void addCredentialsDB(ArrayList<Credential> credentials) {
         credentialsDB.removeAllCredentials();
         for (Credential c : credentials)
             addCredentialDB(c);
     }
 
-    public ArrayList<Credential> getAllCredentials () {
+    public void flagCredentialDB(int id, Credential credential) {
+        SQLiteDatabase db = credentialsDB.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("flagged", credential.getFlagged());
+
+        db.update("credentials", values, "id = ?", new String[]{String.valueOf(id)});
+    }
+
+    public void blockCredentialDB(int id, Credential credential) {
+        SQLiteDatabase db = credentialsDB.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("blocked", credential.getBlocked());
+
+        db.update("credentials", values, "id = ?", new String[]{String.valueOf(id)});
+    }
+
+    public ArrayList<Credential> getAllCredentials() {
         return new ArrayList<>(credentials);
     }
 
     public void getAllCredentialsApi(final Context context) {
+        SharedPreferences sharedPrefUser = context.getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
+        String currentevent = sharedPrefUser.getString(CURRENT_EVENT_NAME, CURRENT_EVENT_NAME);
+
         if (!Utility.hasInternetConnection(context)) {
+            if (credentialListener != null) {
+                credentialListener.onRefreshCredentialList(getAllCredentialsDB());
+            }
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
         } else {
-            JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, mUrlAPICredential, null, new Response.Listener<JSONArray>() {
+            final JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, mUrlAPICredential + "/event/" + currentevent, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
-                    credentials = CredentialJsonParser.parserJsonCredentials(response);
-                    addCredentialsDB(credentials);
+                    /*redentials = CredentialJsonParser.parserJsonCredentials(response);
+                    addCredentialsDB(credentials);*/
 
                     if (credentialListener != null) {
                         credentialListener.onRefreshCredentialList(credentials);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println(error.getMessage());
+                }
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Basic " + authKey);
+                    return headers;
+                }
+            };
+            volleyQueue.add(req);
+        }
+    }
+
+    public void flagCredential(final Context context, final int credentialId) {
+        String url = mUrlAPICredential + "/flag/" + credentialId;
+        if (!Utility.hasInternetConnection(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+        } else {
+            JsonArrayRequest req = new JsonArrayRequest(Request.Method.PUT, url, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    credentials = CredentialJsonParser.parserJsonCredentials(response);
+                    flagCredentialDB(credentialId, credentials.get(0));
+
+                    if (credentialFlagBlockListener != null) {
+                        credentialFlagBlockListener.onFlagCredential(credentials.get(0));
                     }
                 }
             }, new Response.ErrorListener() {
@@ -128,7 +195,39 @@ public class SingletonGestor {
             }) {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> headers = new HashMap<>();
-                    headers.put("Content-Type", "application/json; charset=UTF-8");
+
+                    headers.put("Authorization", "Basic " + authKey);
+                    return headers;
+                }
+            };
+            volleyQueue.add(req);
+        }
+    }
+
+    public void blockCredential(final Context context, final int credentialId) {
+        String url = mUrlAPICredential + "/block/" + credentialId;
+        if (!Utility.hasInternetConnection(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+        } else {
+            JsonArrayRequest req = new JsonArrayRequest(Request.Method.PUT, url, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    credentials = CredentialJsonParser.parserJsonCredentials(response);
+                    blockCredentialDB(credentialId, credentials.get(0));
+
+                    if (credentialFlagBlockListener != null) {
+                        credentialFlagBlockListener.onBlockCredential();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+
                     headers.put("Authorization", "Basic " + authKey);
                     return headers;
                 }
@@ -145,18 +244,19 @@ public class SingletonGestor {
             JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
-                    if(eventUserListener != null)
+                    if (eventUserListener != null)
                         eventUserListener.onGetEvents(response);
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     //Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println(error.getMessage());
                 }
             }) {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> headers = new HashMap<>();
-                    headers.put("Content-Type", "application/json; charset=UTF-8");
+
                     headers.put("Authorization", "Basic " + authKey);
                     return headers;
                 }
@@ -173,19 +273,20 @@ public class SingletonGestor {
             JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
-                    if(accessPointListener != null)
+                    if (accessPointListener != null)
                         accessPointListener.onGetAccessPoints(response, context);
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println(error.getMessage());
                 }
             }) {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> headers = new HashMap<>();
-                    headers.put("Content-Type", "application/json; charset=UTF-8");
                     headers.put("Authorization", "Basic " + authKey);
+                    headers.put("Content-Type: ", "application/json charset=utf-8");
                     return headers;
                 }
             };
@@ -199,7 +300,7 @@ public class SingletonGestor {
         StringRequest req = new StringRequest(Request.Method.GET, mUrlAPIUser + username, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if(loginListener != null)
+                if (loginListener != null)
                     loginListener.onValidateLogin(username, password, response, base64EncodedCredentials);
             }
         }, new Response.ErrorListener() {
@@ -222,10 +323,11 @@ public class SingletonGestor {
                 String credentials = username + ":" + password;
                 authKey = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
                 HashMap<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json; charset=UTF-8");
+
                 headers.put("Authorization", "Basic " + authKey);
                 return headers;
             }
+
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
@@ -237,9 +339,9 @@ public class SingletonGestor {
         volleyQueue.add(req);
     }
 
-    public Movement getMovement (int id) {
+    public Movement getMovement(int id) {
         for (Movement c : movements)
-            if(c.getId() == id)
+            if (c.getId() == id)
                 return c;
         return null;
     }
@@ -249,13 +351,12 @@ public class SingletonGestor {
         return movements;
     }
 
-    public void addMovementBD (Movement movement) {
+    public void addMovementBD(Movement movement) {
         movementsDB.addMovementDb(movement);
     }
 
-    public ArrayList<Movement> getAllMovements () {
+    public ArrayList<Movement> getAllMovements() {
         return new ArrayList<>(movements);
     }
-
 
 }

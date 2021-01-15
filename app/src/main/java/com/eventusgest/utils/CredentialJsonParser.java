@@ -23,6 +23,7 @@ public class CredentialJsonParser {
                     int idCurrentArea = credential.getInt("idCurrentArea");
                     int flagged = credential.getInt("flagged");
                     int blocked = credential.getInt("blocked");
+                    String qrCode = credential.getString("qrcode");
 
                     String carrierName = null;
                     String carrierPhoto = null;
@@ -41,7 +42,7 @@ public class CredentialJsonParser {
                     JSONObject entity = new JSONObject(credential.getString("entity"));
                     String entityName = entity.getString("name");
 
-                    Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName, carrierInfo);
+                    Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName, carrierInfo, qrCode);
                     credentials.add(c);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -64,6 +65,7 @@ public class CredentialJsonParser {
             int idCurrentArea = credential.getInt("idCurrentArea");
             int flagged = credential.getInt("flagged");
             int blocked = credential.getInt("blocked");
+            String qrCode = credential.getString("qrcode");
 
             String carrierName = null;
             String carrierPhoto = null;
@@ -82,7 +84,7 @@ public class CredentialJsonParser {
             JSONObject entity = new JSONObject(credential.getString("entity"));
             String entityName = entity.getString("name");
 
-            Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName, carrierInfo);
+            Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName, carrierInfo, qrCode);
         } catch (JSONException e) {
             e.printStackTrace();
         }

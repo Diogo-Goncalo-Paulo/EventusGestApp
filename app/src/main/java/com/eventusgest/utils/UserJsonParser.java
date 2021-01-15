@@ -10,6 +10,8 @@ public class UserJsonParser {
     public static User parserJsonUser(String response) {
         User auxUser = null;
 
+        System.out.println();
+
         try {
             JSONObject user = new JSONObject(response);
             int id = user.getInt("id");
@@ -18,11 +20,17 @@ public class UserJsonParser {
             int currentEvent = user.getInt("currentEvent");
             JSONObject event = new JSONObject(user.getString("event"));
             String eventName = event.getString("name");
-            JSONObject accessPoint = new JSONObject(user.getString("accessPoint"));
-            int idAccessPoint = user.getInt("idAccessPoint");
-            String accessPointName = accessPoint.getString("name");
-            String role =  user.getString("role");;
 
+            String accessPointName = null;
+            int idAccessPoint = 0;
+
+            if(user.getString("accessPoint") != "null") {
+                JSONObject accessPoint = new JSONObject(user.getString("accessPoint"));
+                idAccessPoint = user.getInt("idAccessPoint");
+                accessPointName = accessPoint.getString("name");
+            }
+
+            String role =  user.getString("role");;
             auxUser = new User(id, currentEvent, eventName, idAccessPoint, accessPointName, username, displayName, role);
         } catch (JSONException e) {
             e.printStackTrace();

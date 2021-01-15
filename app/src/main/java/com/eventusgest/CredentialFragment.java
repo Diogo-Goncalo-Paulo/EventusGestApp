@@ -1,5 +1,6 @@
 package com.eventusgest;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,6 +10,7 @@ import android.os.Debug;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.eventusgest.adaptadores.CredentialListAdapter;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 
 public class CredentialFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, CredentialListener {
     private ListView lvCredentialList;
+    private static final int VER_CREDENCIAL = 1;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     public CredentialFragment() {
@@ -32,6 +35,16 @@ public class CredentialFragment extends Fragment implements SwipeRefreshLayout.O
         setHasOptionsMenu(true);
 
         lvCredentialList = view.findViewById(R.id.lvCredentialList);
+
+        lvCredentialList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getContext(), ViewCredentialActivity.class);
+                intent.putExtra(ViewCredentialActivity.ID, (int) id);
+                //startActivity(intent);
+                startActivityForResult(intent, VER_CREDENCIAL);
+            }
+        });
 
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -46,6 +59,12 @@ public class CredentialFragment extends Fragment implements SwipeRefreshLayout.O
     public void onRefresh() {
         SingletonGestor.getInstance(getContext()).getAllCredentialsApi(getContext());
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onResume() {
+        SingletonGestor.getInstance(getContext()).getAllCredentialsApi(getContext());
+        super.onResume();
     }
 
     @Override

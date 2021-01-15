@@ -79,16 +79,19 @@ public class CredentialListAdapter extends BaseAdapter {
             tvCarrierType.setText(credential.getCarrierType() == null ? "Sem carregador" : credential.getCarrierType());
             tvEntityName.setText(credential.getEntityName());
 
-            if(credential.getCarrierPhoto() != null) {
+            if(credential.getCarrierType() != null && credential.getCarrierPhoto() != "null") {
                 Picasso.get()
                         .load(mUrlAPI + credential.getCarrierPhoto())
                         .into(ivCarrierImg);
-            } else {
+            } else if (credential.getCarrierType() != null && credential.getCarrierPhoto() == "null") {
                 Picasso.get()
                         .load(R.drawable.defaultuser)
                         .into(ivCarrierImg);
+            } else {
+                Picasso.get()
+                        .load(mUrlAPI + credential.getQrCode())
+                        .into(ivCarrierImg);
             }
-
         }
     }
 }

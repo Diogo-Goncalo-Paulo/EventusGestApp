@@ -57,6 +57,9 @@ public class SettingsFragment extends Fragment implements EventUserListener {
 
     @Override
     public void onGetEvents(JSONArray events) {
+        SharedPreferences sharedPrefUser = this.getActivity().getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
+        String event = sharedPrefUser.getString(MainActivity.CURRENT_EVENT_NAME, MainActivity.CURRENT_EVENT_NAME);
+
         Spinner spinner = view.findViewById(R.id.spinnerCurrentEvent);
         spinner.setOnItemSelectedListener(new UserCurrentEventSpinnerAdapter());
 
@@ -70,8 +73,9 @@ public class SettingsFragment extends Fragment implements EventUserListener {
 
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
+        spinner.setSelection(adapter.getPosition(event));
     }
 }

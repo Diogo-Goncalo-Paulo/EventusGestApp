@@ -66,7 +66,7 @@ NavigationView.OnNavigationItemSelectedListener {
         carregarFragmentoInicial();
     }
 
-    private void carregarCabecalho() {
+    public void carregarCabecalho() {
         SharedPreferences sharedPrefUser = getSharedPreferences(USER, Context.MODE_PRIVATE);
         String username = sharedPrefUser.getString(USERNAME, USERNAME);
         String displayname = sharedPrefUser.getString(DISPLAYNAME, DISPLAYNAME);
