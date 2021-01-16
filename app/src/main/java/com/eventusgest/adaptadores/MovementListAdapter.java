@@ -83,16 +83,6 @@ public class MovementListAdapter extends BaseAdapter {
 //                        .into(ivCarrierImg);
 //            }
 
-            if(credential.getCarrierPhoto() != null) {
-                Picasso.get()
-                        .load(mUrlAPI + credential.getCarrierPhoto())
-                        .into(ivCarrierImg);
-            } else {
-                Picasso.get()
-                        .load(R.drawable.defaultuser)
-                        .into(ivCarrierImg);
-            }
-
         }
     }
 }

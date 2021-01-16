@@ -43,12 +43,14 @@ public class SingletonGestor {
     private ArrayList<Credential> credentials;
     private String[] events;
     private CredentialDBHelper credentialsDB = null;
-    private String mUrlAPIUser = "http://192.168.1.68:8080/backend/web/api/user/username/";
-    private String mUrlAPICredential = "http://192.168.1.68:8080/backend/web/api/credential";
-    private String mUrlAPIMovements = "http://192.168.1.68:8080/backend/web/api/movement";
-    private String UrlAPI = "http://192.168.1.68:8080/";
-    private String APIPathUserEvents = "backend/web/api/event/user/";
-    private String APIPathAccessPointEvent = "backend/web/api/accesspoint/event/";
+
+    private String APIUrl = null;
+    private final static String APIPathUser = "/user/username/";
+    private final static String APIPathCredential = "/credential";
+    private final static String APIPathMovements = "/movement";
+    private final static String APIPathUserEvents = "/event/user/";
+    private final static String APIPathAccessPointEvent = "/accesspoint/event/";
+
     private static RequestQueue volleyQueue;
     private CredentialListener credentialListener;
     private CredentialFlagBlockListener credentialFlagBlockListener;
@@ -67,6 +69,18 @@ public class SingletonGestor {
             volleyQueue = Volley.newRequestQueue(context.getApplicationContext());
         }
         return instance;
+    }
+
+    public void setAPIUrl(Context context) {
+        SharedPreferences sharedPrefUser = context.getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
+        if (sharedPrefUser != null) {
+            if (!sharedPrefUser.contains(MainActivity.API_URL)) {
+                SharedPreferences.Editor editor = sharedPrefUser.edit();
+                editor.putString(MainActivity.API_URL, "http://192.168.1.68:8080/backend/web/api");
+                editor.apply();
+            }
+            APIUrl = sharedPrefUser.getString(MainActivity.API_URL, MainActivity.API_URL);
+        }
     }
 
     public void setAccessPointListener(AccessPointListener accessPointListener) {
@@ -146,6 +160,8 @@ public class SingletonGestor {
     public void getAllCredentialsApi(final Context context) {
         SharedPreferences sharedPrefUser = context.getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
         String currentevent = sharedPrefUser.getString(CURRENT_EVENT_NAME, CURRENT_EVENT_NAME);
+        if (APIUrl == null)
+            setAPIUrl(context);
 
         if (!Utility.hasInternetConnection(context)) {
             if (credentialListener != null) {
@@ -153,11 +169,11 @@ public class SingletonGestor {
             }
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
         } else {
-            final JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, mUrlAPICredential + "/event/" + currentevent, null, new Response.Listener<JSONArray>() {
+            final JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, APIUrl + APIPathCredential + "/event/" + currentevent, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
-                    /*redentials = CredentialJsonParser.parserJsonCredentials(response);
-                    addCredentialsDB(credentials);*/
+                    credentials = CredentialJsonParser.parserJsonCredentials(response);
+                    addCredentialsDB(credentials);
 
                     addCredentialsDB(credentials);
 
@@ -183,7 +199,9 @@ public class SingletonGestor {
     }
 
     public void flagCredential(final Context context, final int credentialId) {
-        String url = mUrlAPICredential + "/flag/" + credentialId;
+        if (APIUrl == null)
+            setAPIUrl(context);
+        String url = APIUrl + APIPathCredential + "/flag/" + credentialId;
         if (!Utility.hasInternetConnection(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
         } else {
@@ -215,7 +233,9 @@ public class SingletonGestor {
     }
 
     public void blockCredential(final Context context, final int credentialId) {
-        String url = mUrlAPICredential + "/block/" + credentialId;
+        if (APIUrl == null)
+            setAPIUrl(context);
+        String url = APIUrl + APIPathCredential + "/block/" + credentialId;
         if (!Utility.hasInternetConnection(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
         } else {
@@ -247,7 +267,9 @@ public class SingletonGestor {
     }
 
     public void getAllMovements(final Context context) {
-        String url = UrlAPI + mUrlAPIMovements;
+        if (APIUrl == null)
+            setAPIUrl(context);
+        String url = APIUrl + APIPathMovements;
         if (!Utility.hasInternetConnection(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
         } else {
@@ -279,7 +301,9 @@ public class SingletonGestor {
     }
 
     public void getUserEventsAPI(final Context context, String username) {
-        String url = UrlAPI + APIPathUserEvents + username;
+        if (APIUrl == null)
+            setAPIUrl(context);
+        String url = APIUrl + APIPathUserEvents + username;
         if (!Utility.hasInternetConnection(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
         } else {
@@ -308,7 +332,9 @@ public class SingletonGestor {
     }
 
     public void getAccessPointsAPI(final Context context, String event) {
-        String url = UrlAPI + APIPathAccessPointEvent + event;
+        if (APIUrl == null)
+            setAPIUrl(context);
+        String url = APIUrl + APIPathAccessPointEvent + event;
         if (!Utility.hasInternetConnection(context)) {
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
         } else {
@@ -337,9 +363,11 @@ public class SingletonGestor {
     }
 
     public void loginAPI(final String username, final String password, final Context context) {
+        if (APIUrl == null)
+            setAPIUrl(context);
         String credentials = username + ":" + password;
         final String base64EncodedCredentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
-        StringRequest req = new StringRequest(Request.Method.GET, mUrlAPIUser + username, new Response.Listener<String>() {
+        StringRequest req = new StringRequest(Request.Method.GET, APIUrl + APIPathUser + username, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (loginListener != null)

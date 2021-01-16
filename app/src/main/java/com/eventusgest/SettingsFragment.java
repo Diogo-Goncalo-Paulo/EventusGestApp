@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import com.eventusgest.listeners.EventUserListener;
 import com.eventusgest.modelo.SingletonGestor;
 import com.eventusgest.utils.EventJsonParser;
 import com.eventusgest.utils.Utility;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 
@@ -28,6 +30,7 @@ import androidx.fragment.app.Fragment;
 public class SettingsFragment extends Fragment implements EventUserListener {
 
     private View view = null;
+    private EditText edapiUrl;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -40,8 +43,9 @@ public class SettingsFragment extends Fragment implements EventUserListener {
 
         SingletonGestor.getInstance(getContext().getApplicationContext()).setEventUserListener(this);
 
-        SharedPreferences sharedPrefUser = this.getActivity().getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
+        final SharedPreferences sharedPrefUser = this.getActivity().getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
         String username = sharedPrefUser.getString(MainActivity.USERNAME, MainActivity.USERNAME);
+        String apiUrl = sharedPrefUser.getString(MainActivity.API_URL, MainActivity.API_URL);
 
         if (!Utility.hasInternetConnection(getActivity())) {
             Toast.makeText(getContext(), R.string.noInternet, Toast.LENGTH_SHORT).show();
@@ -49,12 +53,22 @@ public class SettingsFragment extends Fragment implements EventUserListener {
             SingletonGestor.getInstance(getActivity().getApplicationContext()).getUserEventsAPI(getActivity().getApplicationContext(), username);
         }
 
-        String apiUrl = sharedPrefUser.getString(MainActivity.API_URL, MainActivity.API_URL);
-        if (apiUrl == null) {
-//            SharedPreferences.Editor editor = sharedPrefUser.edit();
-//            editor.putString(MainActivity.API_URL, "http://192.168.1.68:8080/");
-//            editor.apply();
+        edapiUrl = view.findViewById(R.id.etAPIUrl);
+        if (apiUrl != null) {
+            edapiUrl.setText(apiUrl);
         }
+
+        FloatingActionButton fab = view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = sharedPrefUser.edit();
+                editor.putString(MainActivity.API_URL, edapiUrl.getText().toString());
+                editor.apply();
+                SingletonGestor.getInstance(getActivity().getApplicationContext()).setAPIUrl(getActivity().getApplicationContext());
+                Toast.makeText(getContext(), "Opções de desenvolvedor guardadas", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }
@@ -74,10 +88,8 @@ public class SettingsFragment extends Fragment implements EventUserListener {
                 android.R.layout.simple_spinner_item,
                 eventss
         );
-
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
         spinner.setSelection(adapter.getPosition(event));
     }
 }

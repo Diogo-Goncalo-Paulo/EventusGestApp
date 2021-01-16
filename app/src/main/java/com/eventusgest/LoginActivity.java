@@ -49,24 +49,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             Toast.makeText(this, R.string.noInternet, Toast.LENGTH_SHORT).show();
             offlineLogin(username, password);
         } else {
-            checkAPIUrl();
             SingletonGestor.getInstance(getApplicationContext()).loginAPI(username, password, getApplicationContext());
-        }
-    }
-
-    /**
-     * Checks if the api url is defined in shared preferences,
-     * if not defines it.
-     */
-    private void checkAPIUrl() {
-        SharedPreferences sharedPrefUser = getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
-        if (sharedPrefUser != null) {
-            String apiUrl = sharedPrefUser.getString(MainActivity.API_URL, MainActivity.API_URL);
-            if (apiUrl == null) {
-                SharedPreferences.Editor editor = sharedPrefUser.edit();
-                editor.putString(MainActivity.API_URL, "http://192.168.1.68:8080/");
-                editor.apply();
-            }
         }
     }
 
