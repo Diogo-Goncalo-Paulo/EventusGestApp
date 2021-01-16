@@ -22,4 +22,20 @@ public class EventJsonParser {
         }
         return events;
     }
+
+    public static String parserJsonEventName(String response, Boolean isAccessPoint) {
+        String name = null;
+            try {
+                JSONObject user = new JSONObject(response);
+                JSONObject obj;
+                if (isAccessPoint)
+                    obj = new JSONObject(user.getString("accessPoint"));
+                else
+                    obj = new JSONObject(user.getString("event"));
+                name = obj.getString("name");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        return name;
+    }
 }

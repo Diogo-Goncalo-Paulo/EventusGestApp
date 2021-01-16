@@ -48,6 +48,8 @@ public class SingletonGestor {
 
     private String APIUrl = null;
     private final static String APIPathUser = "/user/username/";
+    private final static String APIPAthUpdateUserEvent = "/user/event/";
+    private final static String APIPAthUpdateUserAccessPoint = "/user/accesspoint/";
     private final static String APIPathCredential = "/credential";
     private final static String APIPathMovements = "/movement";
     private final static String APIPathUserEvents = "/event/user/";
@@ -61,8 +63,6 @@ public class SingletonGestor {
     private EventUserListener eventUserListener;
     private AccessPointListener accessPointListener;
     private String authKey;
-
-
 
     public static synchronized SingletonGestor getInstance(Context context) {
         if (instance == null) {
@@ -352,7 +352,7 @@ public class SingletonGestor {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Ocurreu um erro!", Toast.LENGTH_SHORT).show();
                     System.out.println(error.getMessage());
                 }
             }) {
@@ -363,6 +363,88 @@ public class SingletonGestor {
                     return headers;
                 }
             };
+            volleyQueue.add(req);
+        }
+    }
+
+    public void updateUserEvent(final Context context, final String event) {
+        if (APIUrl == null)
+            setAPIUrl(context);
+        if (!Utility.hasInternetConnection(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+        } else {
+            SharedPreferences sharedPrefUser = context.getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
+            int userID = sharedPrefUser.getInt(MainActivity.USER_ID, 0);
+
+            String url = APIUrl + APIPAthUpdateUserEvent + userID;
+            StringRequest req = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    if (eventUserListener != null)
+                        eventUserListener.onUpdatedEvent(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, "Ocurreu um erro!", Toast.LENGTH_SHORT).show();
+                    System.out.println(error.getMessage());
+                }
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Basic " + authKey);
+                    headers.put("Content-Type: ", "application/json charset=utf-8");
+                    return headers;
+                }
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("eventName", event);
+                    return params;
+                }
+            };
+
+            volleyQueue.add(req);
+        }
+    }
+
+    public void updateUserAccessPoint(final Context context, final String accessPoint) {
+        if (APIUrl == null)
+            setAPIUrl(context);
+        if (!Utility.hasInternetConnection(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+        } else {
+            SharedPreferences sharedPrefUser = context.getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
+            int userID = sharedPrefUser.getInt(MainActivity.USER_ID, 0);
+
+            String url = APIUrl + APIPAthUpdateUserAccessPoint + userID;
+            StringRequest req = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    if (accessPointListener != null)
+                        accessPointListener.onUpdatedAccessPoint(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, "Ocurreu um erro!", Toast.LENGTH_SHORT).show();
+                    System.out.println(error.getMessage());
+                }
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Basic " + authKey);
+                    headers.put("Content-Type: ", "application/json charset=utf-8");
+                    return headers;
+                }
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("accessPointName", accessPoint);
+                    return params;
+                }
+            };
+
             volleyQueue.add(req);
         }
     }
