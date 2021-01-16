@@ -1,9 +1,11 @@
 package com.eventusgest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 
 public class MovementFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MovementListener {
     private ListView lvMovementList;
+    private static final int VER_MOVIMENTO = 1;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     public MovementFragment() {
@@ -34,6 +37,15 @@ public class MovementFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         lvMovementList = view.findViewById(R.id.lvMovementList);
 
+        lvMovementList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getContext(), ViewMovementActivity.class);
+                intent.putExtra(ViewMovementActivity.ID, (int) id);
+                //startActivity(intent);
+                startActivityForResult(intent, VER_MOVIMENTO);
+            }
+        });
 
 
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
