@@ -2,11 +2,11 @@ package com.eventusgest.modelo;
 
 public class Credential {
     private int id, idEntity, idCurrentArea, idEvent, flagged, blocked;
-    private String ucid, carrierName, carrierType, carrierPhoto, carrierInfo, entityName, qrCode;
+    private String ucid, carrierName, carrierType, carrierPhoto, carrierInfo, entityName, qrCode, entityTypeName, currentAreaName;
 
     private static int autoIncrementedId = 1;
 
-    public Credential(int id, int idEntity, int idCurrentArea, int idEvent, int flagged, int blocked, String ucid, String carrierName, String carrierType, String carrierPhoto, String entityName, String carrierInfo, String qrCode) {
+    public Credential(int id, int idEntity, int idCurrentArea, int idEvent, int flagged, int blocked, String ucid, String carrierName, String carrierType, String carrierPhoto, String entityName, String carrierInfo, String qrCode, String entityTypeName, String currentAreaName) {
         this.id = id;
         this.idEntity = idEntity;
         this.idCurrentArea = idCurrentArea;
@@ -20,6 +20,8 @@ public class Credential {
         this.carrierType = carrierType;
         this.carrierInfo = carrierInfo;
         this.qrCode = qrCode;
+        this.entityTypeName = entityTypeName;
+        this.currentAreaName = currentAreaName;
     }
 
     public int getId() {
@@ -126,5 +128,21 @@ public class Credential {
 
     public void setQrCode(String qrCode) {
         this.qrCode = qrCode;
+    }
+
+    public String getEntityTypeName() {
+        return entityTypeName;
+    }
+
+    public void setEntityTypeName(String entityTypeName) {
+        this.entityTypeName = entityTypeName;
+    }
+
+    public String getCurrentAreaName() {
+        return currentAreaName;
+    }
+
+    public void setCurrentAreaName(String currentAreaName) {
+        this.currentAreaName = currentAreaName;
     }
 }

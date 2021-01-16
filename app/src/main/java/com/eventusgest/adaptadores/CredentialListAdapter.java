@@ -19,7 +19,7 @@ public class CredentialListAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<Credential> credentials;
-    private String mUrlAPI = "http://192.168.1.68:8080";
+    private String mUrlAPI = "http://192.168.1.107:8080";
 
     public CredentialListAdapter(Context context, ArrayList<Credential> credentials) {
         this.context = context;
@@ -73,7 +73,7 @@ public class CredentialListAdapter extends BaseAdapter {
 
         public void update(Credential credential) {
             tvUCID.setText(credential.getCarrierName() == null ? credential.getUcid() : credential.getCarrierName());
-            tvCarrierType.setText(credential.getEntityName() == "null" ? "Sem carregador" : credential.getEntityName());
+            tvCarrierType.setText(credential.getCarrierType() == null ? "Sem carregador." : credential.getCarrierType());
             tvEntityName.setText(credential.getEntityName());
 
             if(credential.getCarrierType() != null && !credential.getCarrierPhoto().equals("null")) {

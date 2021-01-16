@@ -27,6 +27,8 @@ public class CredentialDBHelper extends SQLiteOpenHelper {
     private static final String ENTITY_NAME = "entityName";
     private static final String CARRIER_TYPE_NAME = "carrierTypeName";
     private static final String QR_CODE = "qrCode";
+    private static final String ENTITY_TYPE_NAME = "entityTypeName";
+    private static final String CURRENT_AREA_NAME = "currentAreaName";
 
     private final SQLiteDatabase db;
 
@@ -51,7 +53,9 @@ public class CredentialDBHelper extends SQLiteOpenHelper {
                         ENTITY_NAME + " TEXT, " +
                         CARRIER_TYPE_NAME + " TEXT, " +
                         CARRIER_INFO + " TEXT, " +
-                        QR_CODE + " TEXT); ";
+                        QR_CODE + " TEXT, " +
+                        ENTITY_TYPE_NAME + " TEXT, " +
+                        CURRENT_AREA_NAME + " TEXT); ";
         db.execSQL(sqlCreateTableCredential);
     }
 
@@ -77,6 +81,8 @@ public class CredentialDBHelper extends SQLiteOpenHelper {
         values.put(CARRIER_TYPE_NAME, credential.getCarrierType());
         values.put(CARRIER_INFO, credential.getCarrierInfo());
         values.put(QR_CODE, credential.getQrCode());
+        values.put(ENTITY_TYPE_NAME, credential.getEntityTypeName());
+        values.put(CURRENT_AREA_NAME, credential.getCurrentAreaName());
 
         long id = this.db.insert(TABLE_CREDENTIALS, null, values);
 
@@ -91,11 +97,11 @@ public class CredentialDBHelper extends SQLiteOpenHelper {
 
     public ArrayList<Credential> getAllCredentialsDB() {
         ArrayList<Credential> credentials = new ArrayList<>();
-        Cursor cursor = this.db.query(TABLE_CREDENTIALS, new String[]{ID_CREDENTIAL, ID_ENTITY_CREDENTIAL, ID_CURRENTAREA_CREDENTIAL, ID_EVENT_CREDENTIAL, FLAGGED_CREDENTIAL, BLOCKED_CREDENTIAL, UCID_CREDENTIAL, CARRIER_NAME, CARRIER_PHOTO, ENTITY_NAME, CARRIER_TYPE_NAME, CARRIER_INFO, QR_CODE}, null, null, null, null, null);
+        Cursor cursor = this.db.query(TABLE_CREDENTIALS, new String[]{ID_CREDENTIAL, ID_ENTITY_CREDENTIAL, ID_CURRENTAREA_CREDENTIAL, ID_EVENT_CREDENTIAL, FLAGGED_CREDENTIAL, BLOCKED_CREDENTIAL, UCID_CREDENTIAL, CARRIER_NAME, CARRIER_PHOTO, ENTITY_NAME, CARRIER_TYPE_NAME, CARRIER_INFO, QR_CODE, ENTITY_TYPE_NAME, CURRENT_AREA_NAME}, null, null, null, null, null);
 
         if (cursor.moveToFirst()) {
             do {
-                Credential auxCredential = new Credential(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getString(6), cursor.getString(7), cursor.getString(10), cursor.getString(8), cursor.getString(9), cursor.getString(11), cursor.getString(12));
+                Credential auxCredential = new Credential(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getString(6), cursor.getString(7), cursor.getString(10), cursor.getString(8), cursor.getString(9), cursor.getString(11), cursor.getString(12), cursor.getString(13), cursor.getString(14));
                 credentials.add(auxCredential);
             }
             while (cursor.moveToNext());

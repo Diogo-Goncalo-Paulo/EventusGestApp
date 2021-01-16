@@ -39,10 +39,14 @@ public class CredentialJsonParser {
                         carrierTypeName = carrierType.getString("name");
                     }
 
+                    JSONObject currentArea = new JSONObject(credential.getString("currentArea"));
+                    String currentAreaName = currentArea.getString("name");
                     JSONObject entity = new JSONObject(credential.getString("entity"));
                     String entityName = entity.getString("name");
+                    JSONObject entityType = new JSONObject(entity.getString("entityType"));
+                    String entityTypeName = entityType.getString("name");
 
-                    Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName, carrierInfo, qrCode);
+                    Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName, carrierInfo, qrCode, entityTypeName, currentAreaName);
                     credentials.add(c);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -53,7 +57,7 @@ public class CredentialJsonParser {
         return credentials;
     }
 
-    public static Credential parserJsonCredential(String response) {
+    /*public static Credential parserJsonCredential(String response) {
         Credential auxCredential = null;
 
         try {
@@ -83,12 +87,13 @@ public class CredentialJsonParser {
 
             JSONObject entity = new JSONObject(credential.getString("entity"));
             String entityName = entity.getString("name");
+            JSONObject entityType = new JSONObject(credential.getString("entityType"));
+            String entityTypeName = entity.getString("name");
 
-            Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName, carrierInfo, qrCode);
+            Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName, carrierInfo, qrCode, entityTypeName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return auxCredential;
-    }
-
+    }*/
 }

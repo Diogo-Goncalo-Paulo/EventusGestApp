@@ -13,7 +13,9 @@
         android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".createMovementActivity"></activity>
+        <activity android:name=".createMovementActivity"
+            android:parentActivityName=".MainActivity"
+            android:launchMode="singleTop" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -23,7 +25,7 @@
             android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity"
             android:launchMode="singleTop"/>
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity" android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

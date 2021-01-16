@@ -18,6 +18,7 @@ import com.android.volley.toolbox.Volley;
 import com.eventusgest.MainActivity;
 import com.eventusgest.R;
 import com.eventusgest.listeners.AccessPointListener;
+import com.eventusgest.listeners.CreateMovementListener;
 import com.eventusgest.listeners.CredentialFlagBlockListener;
 import com.eventusgest.listeners.CredentialListener;
 import com.eventusgest.listeners.EventUserListener;
@@ -60,6 +61,7 @@ public class SingletonGestor {
     private LoginListener loginListener;
     private EventUserListener eventUserListener;
     private AccessPointListener accessPointListener;
+    private CreateMovementListener createMovementListener;
     private String authKey;
 
 
@@ -77,7 +79,7 @@ public class SingletonGestor {
         if (sharedPrefUser != null) {
             if (!sharedPrefUser.contains(MainActivity.API_URL)) {
                 SharedPreferences.Editor editor = sharedPrefUser.edit();
-                editor.putString(MainActivity.API_URL, "http://192.168.1.97:8080/backend/web/api");
+                editor.putString(MainActivity.API_URL, "http://192.168.1.107:8080/backend/web/api");
                 editor.apply();
             }
             APIUrl = sharedPrefUser.getString(MainActivity.API_URL, MainActivity.API_URL);
@@ -108,6 +110,10 @@ public class SingletonGestor {
         this.credentialFlagBlockListener = credentialFlagBlockListener;
     }
 
+    public void setCreateMovementListener(CreateMovementListener createMovementListener) {
+        this.createMovementListener = createMovementListener;
+    }
+
     public SingletonGestor(Context context) {
         credentials = new ArrayList<>();
         credentialsDB = new CredentialDBHelper(context);
@@ -118,6 +124,14 @@ public class SingletonGestor {
     public Credential getCredential(int id) {
         for (Credential c : credentialsDB.getAllCredentialsDB())
             if (c.getId() == id) {
+                return c;
+            }
+        return null;
+    }
+
+    public Credential getCredentialUCID(String UCID) {
+        for (Credential c : credentialsDB.getAllCredentialsDB())
+            if (c.getUcid().equals(UCID)) {
                 return c;
             }
         return null;
@@ -176,10 +190,40 @@ public class SingletonGestor {
                     credentials = CredentialJsonParser.parserJsonCredentials(response);
                     addCredentialsDB(credentials);
 
-                    addCredentialsDB(credentials);
-
                     if (credentialListener != null) {
                         credentialListener.onRefreshCredentialList(credentials);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println(error.getMessage());
+                }
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Basic " + authKey);
+                    return headers;
+                }
+            };
+            volleyQueue.add(req);
+        }
+    }
+
+    public void getCredentialAPI(final Context context, String ucid) {
+        if (!Utility.hasInternetConnection(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+        } else {
+            JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, APIUrl + APIPathCredential + "/search?q=" + ucid, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    System.out.println(response);
+                    credentials = CredentialJsonParser.parserJsonCredentials(response);
+                    addCredentialsDB(credentials);
+
+                    if (createMovementListener != null) {
+                        createMovementListener.onSearchUCID(credentials.get(0).getUcid());
                     }
                 }
             }, new Response.ErrorListener() {

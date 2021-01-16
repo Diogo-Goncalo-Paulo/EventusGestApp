@@ -121,8 +121,6 @@ NavigationView.OnNavigationItemSelectedListener {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
                 break;
-            default:
-                System.out.println("-->Nav Estatico");
         }
         if( fragment!=null)
             fragmentManager.beginTransaction().replace(R.id.contentFragment, fragment).commit();
