@@ -43,6 +43,8 @@ public class SingletonGestor {
     private ArrayList<Credential> credentials;
     private String[] events;
     private CredentialDBHelper credentialsDB = null;
+    private ArrayList<Movement> movements;
+    private MovementDBHelper movementsDB = null;
 
     private String APIUrl = null;
     private final static String APIPathUser = "/user/username/";
@@ -60,8 +62,7 @@ public class SingletonGestor {
     private AccessPointListener accessPointListener;
     private String authKey;
 
-    private ArrayList<Movement> movements;
-    private MovementDBHelper movementsDB = null;
+
 
     public static synchronized SingletonGestor getInstance(Context context) {
         if (instance == null) {
@@ -76,7 +77,7 @@ public class SingletonGestor {
         if (sharedPrefUser != null) {
             if (!sharedPrefUser.contains(MainActivity.API_URL)) {
                 SharedPreferences.Editor editor = sharedPrefUser.edit();
-                editor.putString(MainActivity.API_URL, "http://192.168.1.68:8080/backend/web/api");
+                editor.putString(MainActivity.API_URL, "http://192.168.1.97:8080/backend/web/api");
                 editor.apply();
             }
             APIUrl = sharedPrefUser.getString(MainActivity.API_URL, MainActivity.API_URL);
@@ -266,21 +267,26 @@ public class SingletonGestor {
         }
     }
 
-    public void getAllMovements(final Context context) {
+    public void getAllMovementsApi(final Context context) {
+        SharedPreferences sharedPrefUser = context.getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
         if (APIUrl == null)
             setAPIUrl(context);
-        String url = APIUrl + APIPathMovements;
+
         if (!Utility.hasInternetConnection(context)) {
+            if (movementListener != null) {
+                movementListener.onRefreshMovementList(getAllMovementsDB());
+            }
             Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
         } else {
-            JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            final JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, APIUrl + APIPathMovements, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
                     movements = MovementJsonParser.parserJsonMovements(response);
                     addMovementsDB(movements);
 
-                    if (movementListener != null)
+                    if (movementListener != null) {
                         movementListener.onRefreshMovementList(movements);
+                    }
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -291,7 +297,6 @@ public class SingletonGestor {
             }) {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> headers = new HashMap<>();
-
                     headers.put("Authorization", "Basic " + authKey);
                     return headers;
                 }
@@ -416,7 +421,7 @@ public class SingletonGestor {
         return null;
     }
 
-    public ArrayList<Movement> getMovementsDB() {
+    public ArrayList<Movement> getAllMovementsDB() {
         movements = movementsDB.getAllMovementsDB();
         return movements;
     }

@@ -32,10 +32,11 @@ public class MovementJsonParser {
                     String nameAreaTo = movement.getString("nameAreaTo");;
                     String nameAccessPoint = movement.getString("nameAccessPoint");;
                     String nameUser = movement.getString("nameUser");;
+                    String nameCredential = movement.getString("nameCredential");;
 
 
 
-                    Movement m = new Movement(id, time, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser,nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser);
+                    Movement m = new Movement(id, time, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser,nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser,nameCredential);
                     movements.add(m);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -61,8 +62,9 @@ public class MovementJsonParser {
             String nameAreaTo = movement.getString("nameAreaTo");;
             String nameAccessPoint = movement.getString("nameAccessPoint");;
             String nameUser = movement.getString("nameUser");;
+            String nameCredential = movement.getString("nameCredential");;
 
-            auxMovement = new Movement(id, time, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser,nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser);
+            auxMovement = new Movement(id, time, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser,nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser,nameCredential);
         } catch (JSONException e) {
             e.printStackTrace();
         }

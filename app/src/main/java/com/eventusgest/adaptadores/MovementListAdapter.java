@@ -59,30 +59,20 @@ public class MovementListAdapter extends BaseAdapter {
     }
 
     private class ViewHolderList {
-        private TextView tvUCID, tvCarrierType, tvAreaFrom,tvAreaTo;
+        private TextView tvUCID, tvAcessPoint, tvAreaFrom,tvAreaTo;
 
         public ViewHolderList(View view) {
             tvUCID = view.findViewById(R.id.tvUCID);
-            tvCarrierType = view.findViewById(R.id.tvCarrierType1);
+            tvAcessPoint = view.findViewById(R.id.tvAccessPoint);
             tvAreaFrom = view.findViewById(R.id.tvAreaFrom);
             tvAreaTo = view.findViewById(R.id.tvAreaTo);
         }
 
         public void update(Movement movement) {
-            tvUCID.setText();
-            tvCarrierType.setText(credential.getCarrierType() == null ? "Sem carregador" : credential.getCarrierType());
-            tvEntityName.setText(credential.getEntityName());
-
-            if(credential.getCarrierPhoto() != null) {
-                Picasso.get()
-                        .load(mUrlAPI + credential.getCarrierPhoto())
-                        .into(ivCarrierImg);
-            } else {
-                Picasso.get()
-                        .load(R.drawable.defaultuser)
-                        .into(ivCarrierImg);
-            }
-
+            tvUCID.setText(movement.getNameCredential());
+            tvAcessPoint.setText(movement.getNameAccessPoint());
+            tvAreaFrom.setText(movement.getNameAreaFrom());
+            tvAreaTo.setText(movement.getNameAreaTo());
         }
     }
 }

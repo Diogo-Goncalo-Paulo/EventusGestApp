@@ -5,10 +5,10 @@ import java.util.Date;
 public class Movement {
 
     private int id, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser,time;
-    private String nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser;
+    private String nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser,nameCredential;
 
 
-    public Movement(int id, int idCredential, int idAccessPoint, int idAreaFrom, int idAreaTo, int idUser, int time, String nameAreaFrom, String nameAreaTo, String nameAccessPoint, String nameUser) {
+    public Movement(int id, int idCredential, int idAccessPoint, int idAreaFrom, int idAreaTo, int idUser, int time, String nameAreaFrom, String nameAreaTo, String nameAccessPoint, String nameUser, String nameCredential) {
         this.id = id;
         this.idCredential = idCredential;
         this.idAccessPoint = idAccessPoint;
@@ -20,6 +20,16 @@ public class Movement {
         this.nameAreaTo = nameAreaTo;
         this.nameAccessPoint = nameAccessPoint;
         this.nameUser = nameUser;
+        this.nameCredential = nameCredential;
+
+    }
+
+    public String getNameCredential() {
+        return nameCredential;
+    }
+
+    public void setNameCredential(String nameCredential) {
+        this.nameCredential = nameCredential;
     }
 
     public int getId() {

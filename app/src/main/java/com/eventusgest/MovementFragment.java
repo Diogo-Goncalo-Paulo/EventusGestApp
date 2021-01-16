@@ -34,18 +34,20 @@ public class MovementFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         lvMovementList = view.findViewById(R.id.lvMovementList);
 
+
+
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
 
         SingletonGestor.getInstance(getContext()).setMovementListener(this);
-        SingletonGestor.getInstance(getContext()).getAllCredentialsApi(getContext());
+        SingletonGestor.getInstance(getContext()).getAllMovementsApi(getContext());
 
         return view;
     }
 
     @Override
     public void onRefresh() {
-        SingletonGestor.getInstance(getContext()).getAllCredentialsApi(getContext());
+        SingletonGestor.getInstance(getContext()).getAllMovementsApi(getContext());
         swipeRefreshLayout.setRefreshing(false);
     }
 
