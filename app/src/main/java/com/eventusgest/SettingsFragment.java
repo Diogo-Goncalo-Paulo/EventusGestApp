@@ -1,5 +1,6 @@
 package com.eventusgest;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eventusgest.adaptadores.UserAccessPointSpinnerAdapter;
 import com.eventusgest.adaptadores.UserCurrentEventSpinnerAdapter;
+import com.eventusgest.listeners.AccessPointListener;
 import com.eventusgest.listeners.EventUserListener;
 import com.eventusgest.modelo.SingletonGestor;
 import com.eventusgest.utils.EventJsonParser;
@@ -22,12 +26,14 @@ import org.json.JSONArray;
 
 import androidx.fragment.app.Fragment;
 
+import static com.eventusgest.MainActivity.ACCESS_POINT_NAME;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the factory method to
  * create an instance of this fragment.
  */
-public class SettingsFragment extends Fragment implements EventUserListener {
+public class SettingsFragment extends Fragment implements EventUserListener, AccessPointListener {
 
     private View view = null;
     private EditText edapiUrl;
@@ -91,5 +97,55 @@ public class SettingsFragment extends Fragment implements EventUserListener {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setSelection(adapter.getPosition(event));
+    }
+
+    @Override
+    public void onUpdatedEvent(String event) {
+        SingletonGestor.getInstance(view.getContext()).setAccessPointListener(this);
+        SingletonGestor.getInstance(view.getContext()).getAccessPointsAPI(view.getContext(), EventJsonParser.parserJsonEventName(event, false));
+
+        SharedPreferences sharedPrefUser = view.getContext().getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefUser.edit();
+        editor.putString(MainActivity.CURRENT_EVENT_NAME, EventJsonParser.parserJsonEventName(event, false));
+        editor.apply();
+
+
+        String currentevent = sharedPrefUser.getString(MainActivity.CURRENT_EVENT_NAME, MainActivity.CURRENT_EVENT_NAME);
+        TextView tvCurrentEvent = (TextView) ((Activity) view.getContext()).findViewById(R.id.tvCurrentEvent);
+        tvCurrentEvent.setText(String.format("%s • ", currentevent));
+    }
+
+    @Override
+    public void onGetAccessPoints(JSONArray accessPoints, Context context) {
+        Spinner spinner = ((Activity)context).findViewById(R.id.spinnerAccessPoint);
+        spinner.setOnItemSelectedListener(new UserAccessPointSpinnerAdapter());
+
+        SharedPreferences sharedPrefUser = context.getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
+        String accessPoint = sharedPrefUser.getString(MainActivity.ACCESS_POINT_NAME, MainActivity.ACCESS_POINT_NAME);
+
+        String[] accessPointss = EventJsonParser.parserJsonEventNames(accessPoints);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                context,
+                android.R.layout.simple_spinner_item,
+                accessPointss
+        );
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(adapter.getPosition(accessPoint));
+    }
+
+    @Override
+    public void onUpdatedAccessPoint(String accessPoint) {
+        SharedPreferences sharedPrefUser = view.getContext().getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefUser.edit();
+        editor.putString(ACCESS_POINT_NAME,  EventJsonParser.parserJsonEventName(accessPoint, true));
+        editor.apply();
+
+        String accesspoint = sharedPrefUser.getString(ACCESS_POINT_NAME, ACCESS_POINT_NAME);
+
+        TextView tvAccessPoint = (TextView) ((Activity) view.getContext()).findViewById(R.id.tvUserAccessPoint);
+        tvAccessPoint.setText(accesspoint);
     }
 }
