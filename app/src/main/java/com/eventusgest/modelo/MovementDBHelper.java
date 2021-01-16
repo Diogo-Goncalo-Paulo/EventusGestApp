@@ -19,6 +19,10 @@ public class MovementDBHelper extends SQLiteOpenHelper {
     private static final String ID_AREA_FROM = "idAreaFrom";
     private static final String ID_AREA_TO = "idAreaTo";
     private static final String ID_USER = "idUser";
+    private static final String NAME_AREA_FROM = "nameAreaFrom";
+    private static final String NAME_AREA_TO = "nameAreaTo";
+    private static final String NAME_ACCESSPOINT = "nameAccessPoint";
+    private static final String NAME_USER = "nameUser";
 
 
     private final SQLiteDatabase db;
@@ -38,7 +42,11 @@ public class MovementDBHelper extends SQLiteOpenHelper {
                         ID_ACCESSPOINT + " INTEGER NOT NULL, " +
                         ID_AREA_FROM + " INTEGER NOT NULL, " +
                         ID_AREA_TO + " INTEGER NOT NULL, " +
-                        ID_USER + " INTEGER NOT NULL);";
+                        ID_USER + " INTEGER NOT NULL, " +
+                        NAME_AREA_FROM + " TEXT NOT NULL, " +
+                        NAME_AREA_TO + " TEXT NOT NULL, " +
+                        NAME_ACCESSPOINT + " TEXT NOT NULL, " +
+                        NAME_USER + " TEXT NOT NULL);";
         db.execSQL(sqlCreateTableMovement);
     }
 
@@ -58,6 +66,10 @@ public class MovementDBHelper extends SQLiteOpenHelper {
         values.put(ID_AREA_FROM, movement.getIdAreaFrom());
         values.put(ID_AREA_TO, movement.getIdAreaTo());
         values.put(ID_USER, movement.getIdUser());
+        values.put(NAME_AREA_FROM, movement.getNameAreaFrom());
+        values.put(NAME_AREA_TO, movement.getNameAreaTo());
+        values.put(NAME_ACCESSPOINT, movement.getNameAccessPoint());
+        values.put(NAME_USER, movement.getNameUser());
 
         long id = this.db.insert(TABLE_MOVEMENTS, null, values);
 
@@ -75,6 +87,10 @@ public class MovementDBHelper extends SQLiteOpenHelper {
         values.put(ID_AREA_FROM, movement.getIdAreaFrom());
         values.put(ID_AREA_TO, movement.getIdAreaTo());
         values.put(ID_USER, movement.getIdUser());
+        values.put(NAME_AREA_FROM, movement.getNameAreaFrom());
+        values.put(NAME_AREA_TO, movement.getNameAreaTo());
+        values.put(NAME_ACCESSPOINT, movement.getNameAccessPoint());
+        values.put(NAME_USER, movement.getNameUser());
 
         this.db.update(TABLE_MOVEMENTS, values, ID_MOVEMENT+"="+movement.getId(),null);
         return movement;
@@ -90,7 +106,7 @@ public class MovementDBHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Movement auxMovement = new Movement(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6));
+                Movement auxMovement = new Movement(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6),cursor.getString(7),cursor.getString(8),cursor.getString(9),cursor.getString(10));
                 movements.add(auxMovement);
             }
             while (cursor.moveToNext());
