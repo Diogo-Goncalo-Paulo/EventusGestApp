@@ -106,7 +106,7 @@ NavigationView.OnNavigationItemSelectedListener {
 
         switch (item .getItemId()) {
             case R.id.nav_movimentos:
-                fragment = new CredentialFragment();
+                fragment = new MovementFragment();
                 setTitle(item.getTitle());
                 break;
             case R.id.nav_credenciais:

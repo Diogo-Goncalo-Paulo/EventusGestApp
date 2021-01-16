@@ -69,19 +69,19 @@ public class MovementListAdapter extends BaseAdapter {
         }
 
         public void update(Movement movement) {
-//            tvUCID.setText();
-//            tvCarrierType.setText(credential.getCarrierType() == null ? "Sem carregador" : credential.getCarrierType());
-//            tvEntityName.setText(credential.getEntityName());
-//
-//            if(credential.getCarrierPhoto() != null) {
-//                Picasso.get()
-//                        .load(mUrlAPI + credential.getCarrierPhoto())
-//                        .into(ivCarrierImg);
-//            } else {
-//                Picasso.get()
-//                        .load(R.drawable.defaultuser)
-//                        .into(ivCarrierImg);
-//            }
+            tvUCID.setText();
+            tvCarrierType.setText(credential.getCarrierType() == null ? "Sem carregador" : credential.getCarrierType());
+            tvEntityName.setText(credential.getEntityName());
+
+            if(credential.getCarrierPhoto() != null) {
+                Picasso.get()
+                        .load(mUrlAPI + credential.getCarrierPhoto())
+                        .into(ivCarrierImg);
+            } else {
+                Picasso.get()
+                        .load(R.drawable.defaultuser)
+                        .into(ivCarrierImg);
+            }
 
         }
     }
