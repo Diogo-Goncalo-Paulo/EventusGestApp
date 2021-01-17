@@ -5,6 +5,7 @@ import androidx.appcompat.widget.AppCompatImageButton;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -14,6 +15,9 @@ import com.eventusgest.modelo.Credential;
 import com.eventusgest.modelo.Movement;
 import com.eventusgest.modelo.SingletonGestor;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewMovementActivity extends AppCompatActivity {
 
@@ -39,7 +43,6 @@ public class ViewMovementActivity extends AppCompatActivity {
         tvTimeMov = findViewById(R.id.tvTimeMov);
         tvPorteiro = findViewById(R.id.tvPorteiro);
         spinnerAreaTo = findViewById(R.id.spinnerAreaTo);
-
         carregarInfo();
     }
 
@@ -50,26 +53,16 @@ public class ViewMovementActivity extends AppCompatActivity {
         tvTimeMov.setText(movement.getTime());
         tvPorteiro.setText(movement.getNameUser());
 
-        btnFlag.setText(String.valueOf(credential.getFlagged()));
+        List<String> spinnerArray =  new ArrayList<String>();
+        spinnerArray.add("item1");
+        spinnerArray.add("item2");
 
-        if(credential.getBlocked() > 0) {
-            btnFlag.setEnabled(false);
-            btnBlock.setEnabled(false);
-        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, spinnerArray);
 
-        if(credential.getCarrierType() != null && !credential.getCarrierPhoto().equals("null")) {
-            Picasso.get()
-                    .load(mUrlAPI + credential.getCarrierPhoto())
-                    .into(profilePicture);
-        } else if (credential.getCarrierType() != null && credential.getCarrierPhoto().equals("null")) {
-            Picasso.get()
-                    .load(R.drawable.defaultuser)
-                    .into(profilePicture);
-        } else {
-            Picasso.get()
-                    .load(mUrlAPI + credential.getQrCode())
-                    .into(profilePicture);
-        }
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerAreaTo.setAdapter(adapter);
     }
 
 }
