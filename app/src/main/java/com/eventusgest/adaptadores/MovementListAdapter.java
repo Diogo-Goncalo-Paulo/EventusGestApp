@@ -19,7 +19,7 @@ public class MovementListAdapter extends BaseAdapter {
     private ArrayList<Movement> movements;
     private String mUrlAPI = "http://192.168.1.68:8080";
 
-    public MovementListAdapter(Context context, ArrayList<Movement> credentials) {
+    public MovementListAdapter(Context context, ArrayList<Movement> movements) {
         this.context = context;
         this.movements = movements;
     }

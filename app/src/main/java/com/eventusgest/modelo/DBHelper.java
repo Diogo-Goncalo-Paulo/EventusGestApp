@@ -10,9 +10,10 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class CredentialDBHelper extends SQLiteOpenHelper {
+public class DBHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "eventusgest";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 4;
+
     private static final String TABLE_CREDENTIALS = "credentials";
     private static final String ID_CREDENTIAL = "id";
     private static final String UCID_CREDENTIAL = "ucid";
@@ -30,9 +31,23 @@ public class CredentialDBHelper extends SQLiteOpenHelper {
     private static final String ENTITY_TYPE_NAME = "entityTypeName";
     private static final String CURRENT_AREA_NAME = "currentAreaName";
 
+    private static final String TABLE_MOVEMENTS = "movements";
+    private static final String ID_MOVEMENT = "id";
+    private static final String TIME = "time";
+    private static final String ID_CREDENTIAL_MOV = "idCredential";
+    private static final String ID_ACCESSPOINT = "idAccessPoint";
+    private static final String ID_AREA_FROM = "idAreaFrom";
+    private static final String ID_AREA_TO = "idAreaTo";
+    private static final String ID_USER = "idUser";
+    private static final String NAME_AREA_FROM = "nameAreaFrom";
+    private static final String NAME_AREA_TO = "nameAreaTo";
+    private static final String NAME_ACCESSPOINT = "nameAccessPoint";
+    private static final String NAME_USER = "nameUser";
+    private static final String NAME_CREDENTIAL = "nameCredential";
+
     private final SQLiteDatabase db;
 
-    public CredentialDBHelper(Context context) {
+    public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.db = getWritableDatabase();
     }
@@ -56,6 +71,22 @@ public class CredentialDBHelper extends SQLiteOpenHelper {
                         QR_CODE + " TEXT, " +
                         ENTITY_TYPE_NAME + " TEXT, " +
                         CURRENT_AREA_NAME + " TEXT); ";
+
+        String sqlCreateTableMovement =
+                "CREATE TABLE " + TABLE_MOVEMENTS + " ( " +
+                        ID_MOVEMENT + " INTEGER PRIMARY KEY, " +
+                        ID_CREDENTIAL_MOV + " INTEGER NOT NULL, " +
+                        ID_ACCESSPOINT + " INTEGER NOT NULL, " +
+                        ID_AREA_FROM + " INTEGER NOT NULL, " +
+                        ID_AREA_TO + " INTEGER NOT NULL, " +
+                        ID_USER + " INTEGER NOT NULL, " +
+                        TIME + " TEXT NOT NULL, " +
+                        NAME_AREA_FROM + " TEXT NOT NULL, " +
+                        NAME_AREA_TO + " TEXT NOT NULL, " +
+                        NAME_ACCESSPOINT + " TEXT NOT NULL, " +
+                        NAME_USER + " TEXT NOT NULL, " +
+                        NAME_CREDENTIAL + " TEXT NOT NULL); ";
+        db.execSQL(sqlCreateTableMovement);
         db.execSQL(sqlCreateTableCredential);
     }
 
@@ -63,6 +94,8 @@ public class CredentialDBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         String sqlDropTableCredential = "DROP TABLE IF EXISTS " + TABLE_CREDENTIALS;
         db.execSQL(sqlDropTableCredential);
+        String sqlCreateTableMovement = "DROP TABLE IF EXISTS " + TABLE_MOVEMENTS;
+        db.execSQL(sqlCreateTableMovement);
         this.onCreate(db);
     }
 
@@ -108,5 +141,45 @@ public class CredentialDBHelper extends SQLiteOpenHelper {
         }
 
         return credentials;
+    }
+
+    public Movement addMovementDb (Movement movement) {
+        ContentValues values = new ContentValues();
+        values.put(ID_MOVEMENT, movement.getId());
+        values.put(ID_CREDENTIAL_MOV, movement.getIdCredential());
+        values.put(ID_ACCESSPOINT, movement.getIdAccessPoint());
+        values.put(ID_AREA_FROM, movement.getIdAreaFrom());
+        values.put(ID_AREA_TO, movement.getIdAreaTo());
+        values.put(ID_USER, movement.getIdUser());
+        values.put(TIME, movement.getTime());
+        values.put(NAME_AREA_FROM, movement.getNameAreaFrom());
+        values.put(NAME_AREA_TO, movement.getNameAreaTo());
+        values.put(NAME_ACCESSPOINT, movement.getNameAccessPoint());
+        values.put(NAME_USER, movement.getNameUser());
+        values.put(NAME_CREDENTIAL, movement.getNameCredential());
+
+        long id = this.db.insert(TABLE_MOVEMENTS, null, values);
+
+        if(id > -1)
+            movement.setId((int) id);
+        return movement;
+    }
+
+    public void removeAllMovements() {
+        this.db.delete(TABLE_MOVEMENTS,null, null);
+    }
+
+    public ArrayList<Movement> getAllMovementsDB() {
+        ArrayList<Movement> movements = new ArrayList<>();
+        Cursor cursor = this.db.query(TABLE_MOVEMENTS, new String[]{ID_MOVEMENT,TIME , ID_CREDENTIAL_MOV, ID_ACCESSPOINT, ID_AREA_FROM, ID_AREA_TO, ID_USER}, null, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Movement auxMovement = new Movement(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getString(6),cursor.getString(7),cursor.getString(8),cursor.getString(9),cursor.getString(10),cursor.getString(11));
+                movements.add(auxMovement);
+            }
+            while (cursor.moveToNext());
+        }
+        return movements;
     }
 }

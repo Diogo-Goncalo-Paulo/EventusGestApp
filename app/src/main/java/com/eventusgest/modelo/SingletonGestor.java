@@ -42,10 +42,10 @@ import static com.eventusgest.MainActivity.CURRENT_EVENT_NAME;
 public class SingletonGestor {
     private static SingletonGestor instance = null;
     private ArrayList<Credential> credentials;
-    private String[] events;
-    private CredentialDBHelper credentialsDB = null;
     private ArrayList<Movement> movements;
-    private MovementDBHelper movementsDB = null;
+    private String[] events;
+    private DBHelper dbHelper = null;
+
 
     private String APIUrl = null;
     private final static String APIPathUser = "/user/username/";
@@ -79,7 +79,7 @@ public class SingletonGestor {
         if (sharedPrefUser != null) {
             if (!sharedPrefUser.contains(MainActivity.API_URL)) {
                 SharedPreferences.Editor editor = sharedPrefUser.edit();
-                editor.putString(MainActivity.API_URL, "http://192.168.1.68:8080/backend/web/api");
+                editor.putString(MainActivity.API_URL, "http://192.168.1.97:8080/backend/web/api");
                 editor.apply();
             }
             APIUrl = sharedPrefUser.getString(MainActivity.API_URL, MainActivity.API_URL);
@@ -116,13 +116,13 @@ public class SingletonGestor {
 
     public SingletonGestor(Context context) {
         credentials = new ArrayList<>();
-        credentialsDB = new CredentialDBHelper(context);
         movements = new ArrayList<>();
-        movementsDB = new MovementDBHelper(context);
+        dbHelper = new DBHelper(context);
+
     }
 
     public Credential getCredential(int id) {
-        for (Credential c : credentialsDB.getAllCredentialsDB())
+        for (Credential c : dbHelper.getAllCredentialsDB())
             if (c.getId() == id) {
                 return c;
             }
@@ -130,7 +130,7 @@ public class SingletonGestor {
     }
 
     public Credential getCredentialUCID(String UCID) {
-        for (Credential c : credentialsDB.getAllCredentialsDB())
+        for (Credential c : dbHelper.getAllCredentialsDB())
             if (c.getUcid().equals(UCID)) {
                 return c;
             }
@@ -138,22 +138,22 @@ public class SingletonGestor {
     }
 
     public ArrayList<Credential> getAllCredentialsDB() {
-        credentials = credentialsDB.getAllCredentialsDB();
+        credentials = dbHelper.getAllCredentialsDB();
         return credentials;
     }
 
     public void addCredentialDB(Credential credential) {
-        credentialsDB.addCredentialDb(credential);
+        dbHelper.addCredentialDb(credential);
     }
 
     public void addCredentialsDB(ArrayList<Credential> credentials) {
-        credentialsDB.removeAllCredentials();
+        dbHelper.removeAllCredentials();
         for (Credential c : credentials)
             addCredentialDB(c);
     }
 
     public void flagCredentialDB(int id, Credential credential) {
-        SQLiteDatabase db = credentialsDB.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("flagged", credential.getFlagged());
 
@@ -161,7 +161,7 @@ public class SingletonGestor {
     }
 
     public void blockCredentialDB(int id, Credential credential) {
-        SQLiteDatabase db = credentialsDB.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("blocked", credential.getBlocked());
 
@@ -548,16 +548,16 @@ public class SingletonGestor {
     }
 
     public ArrayList<Movement> getAllMovementsDB() {
-        movements = movementsDB.getAllMovementsDB();
+        movements = dbHelper.getAllMovementsDB();
         return movements;
     }
 
     public void addMovementDB(Movement movement) {
-        movementsDB.addMovementDb(movement);
+        dbHelper.addMovementDb(movement);
     }
 
     public void addMovementsDB(ArrayList<Movement> movements) {
-        movementsDB.removeAllMovements();
+        dbHelper.removeAllMovements();
         for (Movement m : movements)
             addMovementDB(m);
     }

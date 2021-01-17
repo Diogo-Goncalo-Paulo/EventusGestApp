@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class Movement {
 
-    private int id, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser,time;
-    private String nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser,nameCredential;
+    private int id, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser;
+    private String time,nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser,nameCredential;
 
 
-    public Movement(int id, int idCredential, int idAccessPoint, int idAreaFrom, int idAreaTo, int idUser, int time, String nameAreaFrom, String nameAreaTo, String nameAccessPoint, String nameUser, String nameCredential) {
+    public Movement(int id, int idCredential, int idAccessPoint, int idAreaFrom, int idAreaTo, int idUser, String time, String nameAreaFrom, String nameAreaTo, String nameAccessPoint, String nameUser, String nameCredential) {
         this.id = id;
         this.idCredential = idCredential;
         this.idAccessPoint = idAccessPoint;
@@ -80,11 +80,11 @@ public class Movement {
         this.idUser = idUser;
     }
 
-    public int getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(String time) {
         this.time = time;
     }
 

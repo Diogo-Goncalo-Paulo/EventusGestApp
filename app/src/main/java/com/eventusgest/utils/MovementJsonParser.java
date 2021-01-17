@@ -22,12 +22,12 @@ public class MovementJsonParser {
                 try {
                     JSONObject movement = (JSONObject) response.get(i);
                     int id = movement.getInt("id");
-                    int time = movement.getInt("time");
                     int idCredential = movement.getInt("idCredential");
                     int idAccessPoint = movement.getInt("idAccessPoint");
                     int idAreaFrom = movement.getInt("idAreaFrom");
                     int idAreaTo = movement.getInt("idAreaTo");
                     int idUser = movement.getInt("idUser");
+                    String time = movement.getString("time");
                     String nameAreaFrom = movement.getString("nameAreaFrom");
                     String nameAreaTo = movement.getString("nameAreaTo");;
                     String nameAccessPoint = movement.getString("nameAccessPoint");;
@@ -36,7 +36,7 @@ public class MovementJsonParser {
 
 
 
-                    Movement m = new Movement(id, time, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser,nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser,nameCredential);
+                    Movement m = new Movement(id, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser,time,nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser,nameCredential);
                     movements.add(m);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -52,19 +52,19 @@ public class MovementJsonParser {
         try {
             JSONObject movement = new JSONObject(response);
             int id = movement.getInt("id");
-            int time = movement.getInt("time");
             int idCredential = movement.getInt("idCredential");
             int idAccessPoint = movement.getInt("idAccessPoint");
             int idAreaFrom = movement.getInt("idAreaFrom");
             int idAreaTo = movement.getInt("idAreaTo");
             int idUser = movement.getInt("idUser");
+            String time = movement.getString("time");
             String nameAreaFrom = movement.getString("nameAreaFrom");
             String nameAreaTo = movement.getString("nameAreaTo");;
             String nameAccessPoint = movement.getString("nameAccessPoint");;
             String nameUser = movement.getString("nameUser");;
             String nameCredential = movement.getString("nameCredential");;
 
-            auxMovement = new Movement(id, time, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser,nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser,nameCredential);
+            auxMovement = new Movement(id, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser, time,nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser,nameCredential);
         } catch (JSONException e) {
             e.printStackTrace();
         }
