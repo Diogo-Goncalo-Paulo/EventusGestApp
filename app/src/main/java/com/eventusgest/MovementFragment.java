@@ -1,6 +1,8 @@
 package com.eventusgest;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,8 @@ import java.util.ArrayList;
 
 public class MovementFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MovementListener {
     private ListView lvMovementList;
+    public static final String USER = "USER_PREF_SHARED";
+    public static final String CURRENT_EVENT = "CURRENT_EVENT";
     private static final int VER_MOVIMENTO = 1;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -66,7 +70,20 @@ public class MovementFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onRefreshMovementList(ArrayList<Movement> movementList) {
         if (movementList != null) {
-            lvMovementList.setAdapter(new MovementListAdapter(getContext(),movementList));
+            ArrayList<Movement> movementCurrentEventList = new ArrayList<>();
+            SharedPreferences sharedPref = this.getActivity().getSharedPreferences(USER, Context.MODE_PRIVATE);
+
+            for (Movement m: movementList) {
+                if(m.getIdEvent() == sharedPref.getInt(CURRENT_EVENT,-1)){
+                    movementCurrentEventList.add(m);
+                }
+            }
+
+            if(movementCurrentEventList != null){
+                lvMovementList.setAdapter(new MovementListAdapter(getContext(),movementCurrentEventList));
+            }
+
+
         }
     }
 }
