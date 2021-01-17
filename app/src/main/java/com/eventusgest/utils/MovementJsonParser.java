@@ -34,8 +34,6 @@ public class MovementJsonParser {
                     String nameUser = movement.getString("nameUser");;
                     String nameCredential = movement.getString("nameCredential");;
 
-
-
                     Movement m = new Movement(id, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser,time,nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser,nameCredential);
                     movements.add(m);
                 } catch (JSONException e) {
