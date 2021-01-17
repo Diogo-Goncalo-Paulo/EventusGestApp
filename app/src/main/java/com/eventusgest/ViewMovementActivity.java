@@ -1,23 +1,15 @@
 package com.eventusgest;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageButton;
-
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.eventusgest.modelo.Credential;
 import com.eventusgest.modelo.Movement;
 import com.eventusgest.modelo.SingletonGestor;
-import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
 
 public class ViewMovementActivity extends AppCompatActivity {
 
@@ -56,16 +48,26 @@ public class ViewMovementActivity extends AppCompatActivity {
         tvTimeMov.setText(movement.getTime());
         tvPorteiro.setText(movement.getNameUser());
 
-        List<String> spinnerArray =  new ArrayList<String>();
-        spinnerArray.add("item1");
-        spinnerArray.add("item2");
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, spinnerArray);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinnerAreaTo.setAdapter(adapter);
+//        btnFlag.setText(String.valueOf(credential.getFlagged()));
+//
+//        if(credential.getBlocked() > 0) {
+//            btnFlag.setEnabled(false);
+//            btnBlock.setEnabled(false);
+//        }
+//
+//        if(credential.getCarrierType() != null && !credential.getCarrierPhoto().equals("null")) {
+//            Picasso.get()
+//                    .load(mUrlAPI + credential.getCarrierPhoto())
+//                    .into(profilePicture);
+//        } else if (credential.getCarrierType() != null && credential.getCarrierPhoto().equals("null")) {
+//            Picasso.get()
+//                    .load(R.drawable.defaultuser)
+//                    .into(profilePicture);
+//        } else {
+//            Picasso.get()
+//                    .load(mUrlAPI + credential.getQrCode())
+//                    .into(profilePicture);
+//        }
     }
 
 }
