@@ -23,4 +23,5 @@
     <string name="op_es_do_utilizador">Opções do Utilizador</string>
     <string name="op_es_de_desenvolvedor">Opções de Desenvolvedor</string>
     <string name="pesquisar_credencial">Pesquisar credencial</string>
+    <string name="guardar">Guardar</string>
 </resources>

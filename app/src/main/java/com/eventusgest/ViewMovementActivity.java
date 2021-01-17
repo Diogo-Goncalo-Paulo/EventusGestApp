@@ -5,21 +5,27 @@ import androidx.appcompat.widget.AppCompatImageButton;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.eventusgest.modelo.Credential;
+import com.eventusgest.modelo.Movement;
 import com.eventusgest.modelo.SingletonGestor;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewMovementActivity extends AppCompatActivity {
 
     public static final String ID = "ID";
-    private Credential credential;
-    private Credential credentialUpdated;
-    private TextView tvNomeCarregador, tvTipoCarregador, tvInfo;
-    private Button btnFlag;
+    private Movement movement;
+    private Movement movementUpdated;
+    private TextView tvUCID, tvAccessPoint, tvAreaFrom,tvTimeMov,tvPorteiro;
+    private Spinner spinnerAreaTo;
     private AppCompatImageButton btnBlock;
     private ImageView profilePicture;
     private String mUrlAPI = "http://192.168.1.107:8080";
@@ -32,43 +38,34 @@ public class ViewMovementActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         int id = getIntent().getIntExtra(ID, -1);
-        credential = SingletonGestor.getInstance(getApplicationContext()).getCredential(id);
+        movement = SingletonGestor.getInstance(getApplicationContext()).getMovement(id);
 
-        tvNomeCarregador = findViewById(R.id.tvNomeCarregador);
-        tvTipoCarregador = findViewById(R.id.tvTipoCarregador);
-        tvInfo = findViewById(R.id.tvInfo1);
-        btnFlag = findViewById(R.id.btn_flagged);
-        btnBlock = findViewById(R.id.btn_blocked);
-        profilePicture = findViewById(R.id.profilePicture);
-
+        tvUCID = findViewById(R.id.tvUCID);
+        tvAccessPoint = findViewById(R.id.tvAccessPoint);
+        tvAreaFrom = findViewById(R.id.tvAreaFrom);
+        tvTimeMov = findViewById(R.id.tvTimeMov);
+        tvPorteiro = findViewById(R.id.tvPorteiro);
+        spinnerAreaTo = findViewById(R.id.spinnerAreaTo);
         carregarInfo();
     }
 
     private void carregarInfo () {
-        tvNomeCarregador.setText(credential.getCarrierName() == null ? credential.getUcid() : credential.getCarrierName());
-        tvTipoCarregador.setText(credential.getCarrierType() == null ? "Sem carregador." : credential.getCarrierType());
-        tvInfo.setText(credential.getCarrierInfo() == null ? "Sem info." : credential.getCarrierInfo());
+        tvUCID.setText(movement.getNameCredential());
+        tvAccessPoint.setText(movement.getNameAccessPoint());
+        tvAreaFrom.setText(movement.getNameAreaFrom());
+        tvTimeMov.setText(movement.getTime());
+        tvPorteiro.setText(movement.getNameUser());
 
-        btnFlag.setText(String.valueOf(credential.getFlagged()));
+        List<String> spinnerArray =  new ArrayList<String>();
+        spinnerArray.add("item1");
+        spinnerArray.add("item2");
 
-        if(credential.getBlocked() > 0) {
-            btnFlag.setEnabled(false);
-            btnBlock.setEnabled(false);
-        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, spinnerArray);
 
-        if(credential.getCarrierType() != null && !credential.getCarrierPhoto().equals("null")) {
-            Picasso.get()
-                    .load(mUrlAPI + credential.getCarrierPhoto())
-                    .into(profilePicture);
-        } else if (credential.getCarrierType() != null && credential.getCarrierPhoto().equals("null")) {
-            Picasso.get()
-                    .load(R.drawable.defaultuser)
-                    .into(profilePicture);
-        } else {
-            Picasso.get()
-                    .load(mUrlAPI + credential.getQrCode())
-                    .into(profilePicture);
-        }
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerAreaTo.setAdapter(adapter);
     }
 
 }

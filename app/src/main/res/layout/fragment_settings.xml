@@ -123,6 +123,6 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         app:srcCompat="@drawable/ic_baseline_save_24_white"
-        android:contentDescription="TODO" />
+        android:contentDescription="@string/guardar" />
 
 </FrameLayout>
