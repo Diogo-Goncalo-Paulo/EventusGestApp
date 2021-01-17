@@ -8,6 +8,7 @@ import android.util.Base64;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -254,7 +255,8 @@ public class SingletonGestor {
                 @Override
                 public void onResponse(JSONArray response) {
                     credentials = CredentialJsonParser.parserJsonCredentials(response);
-                    flagCredentialDB(credentialId, credentials.get(0));
+                    //flagCredentialDB(credentialId, credentials.get(0));
+                    System.out.println(response);
 
                     if (credentialFlagBlockListener != null) {
                         credentialFlagBlockListener.onFlagCredential(credentials.get(0));
@@ -264,6 +266,7 @@ public class SingletonGestor {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     //Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println(error.getMessage());
                 }
             }) {
                 public Map<String, String> getHeaders() throws AuthFailureError {
@@ -408,6 +411,7 @@ public class SingletonGestor {
                     return headers;
                 }
             };
+
             volleyQueue.add(req);
         }
     }
@@ -448,7 +452,6 @@ public class SingletonGestor {
                     return params;
                 }
             };
-
             volleyQueue.add(req);
         }
     }
@@ -489,7 +492,6 @@ public class SingletonGestor {
                     return params;
                 }
             };
-
             volleyQueue.add(req);
         }
     }

@@ -1,5 +1,7 @@
 package com.eventusgest.adaptadores;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.eventusgest.R;
+import com.eventusgest.ViewCredentialActivity;
 import com.eventusgest.modelo.Movement;
 
 import java.util.ArrayList;
@@ -44,8 +47,15 @@ public class MovementListAdapter extends BaseAdapter {
         if (inflater == null)
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        if (convertView == null)
-            convertView = inflater.inflate(R.layout.movement_list_item,null);
+
+        if (convertView == null) {
+            if(context instanceof Application) {
+                convertView = inflater.inflate(R.layout.credential_movement_list_item,null);
+            } else {
+                convertView = inflater.inflate(R.layout.movement_list_item,null);
+            }
+        }
+
 
         ViewHolderList viewHolderList = (ViewHolderList) convertView.getTag();
         if (viewHolderList == null) {
@@ -62,14 +72,23 @@ public class MovementListAdapter extends BaseAdapter {
         private TextView tvUCID, tvAcessPoint, tvAreaFrom,tvAreaTo;
 
         public ViewHolderList(View view) {
-            tvUCID = view.findViewById(R.id.tvUCID);
-            tvAcessPoint = view.findViewById(R.id.tvAccessPoint);
-            tvAreaFrom = view.findViewById(R.id.tvAreaFrom);
-            tvAreaTo = view.findViewById(R.id.tvAreaTo);
+            if(context instanceof Application) {
+                tvUCID = view.findViewById(R.id.tvUCID);
+                tvAcessPoint = view.findViewById(R.id.tvAccessPoint);
+                tvAreaFrom = view.findViewById(R.id.tvAreaFrom);
+                tvAreaTo = view.findViewById(R.id.tvAreaTo);
+            } else {
+                tvUCID = view.findViewById(R.id.tvUCID);
+                tvAcessPoint = view.findViewById(R.id.tvAccessPoint);
+                tvAreaFrom = view.findViewById(R.id.tvAreaFrom);
+                tvAreaTo = view.findViewById(R.id.tvAreaTo);
+            }
         }
 
         public void update(Movement movement) {
-            tvUCID.setText(movement.getNameCredential());
+            if(!(context instanceof Application)) {
+                tvUCID.setText(movement.getNameCredential());
+            }
             tvAcessPoint.setText(movement.getNameAccessPoint());
             tvAreaFrom.setText(movement.getNameAreaFrom());
             tvAreaTo.setText(movement.getNameAreaTo());
