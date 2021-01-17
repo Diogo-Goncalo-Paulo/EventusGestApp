@@ -82,7 +82,7 @@ public class SingletonGestor {
         if (sharedPrefUser != null) {
             if (!sharedPrefUser.contains(MainActivity.API_URL)) {
                 SharedPreferences.Editor editor = sharedPrefUser.edit();
-                editor.putString(MainActivity.API_URL, "http://192.168.1.97:8080/backend/web/api");
+                editor.putString(MainActivity.API_URL, "http://192.168.1.68:8080/backend/web/api");
                 editor.apply();
             }
             APIUrl = sharedPrefUser.getString(MainActivity.API_URL, MainActivity.API_URL);
@@ -333,6 +333,7 @@ public class SingletonGestor {
                 @Override
                 public void onResponse(JSONArray response) {
                     movements = MovementJsonParser.parserJsonMovements(response);
+                    System.out.println(response);
                     addMovementsDB(movements);
 
                     if (movementListener != null) {
@@ -588,6 +589,18 @@ public class SingletonGestor {
     public ArrayList<Movement> getAllMovementsDB() {
         movements = dbHelper.getAllMovementsDB();
         return movements;
+    }
+
+    public ArrayList<Movement> getCredentialMovements(int id) {
+        ArrayList<Movement> movementss = new ArrayList<>();
+
+        for (Movement m : dbHelper.getAllMovementsDB()) {
+            if (m.getIdCredential() == id) {
+                movementss.add(m);
+            }
+        }
+
+        return movementss;
     }
 
     public void addMovementDB(Movement movement) {

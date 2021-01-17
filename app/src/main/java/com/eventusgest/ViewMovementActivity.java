@@ -1,12 +1,6 @@
 package com.eventusgest;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageButton;
-
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -15,12 +9,13 @@ import com.eventusgest.listeners.AreasLeftListener;
 import com.eventusgest.modelo.Credential;
 import com.eventusgest.modelo.Movement;
 import com.eventusgest.modelo.SingletonGestor;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
 
 public class ViewMovementActivity extends AppCompatActivity implements AreasLeftListener {
 
@@ -31,6 +26,9 @@ public class ViewMovementActivity extends AppCompatActivity implements AreasLeft
     private TextView tvUCID, tvAccessPoint, tvAreaFrom,tvTimeMov,tvPorteiro;
     private Spinner spinnerAreaTo;
     private AppCompatImageButton btnBlock;
+    private ImageView profilePicture;
+    private String mUrlAPI = "http://192.168.1.107:8080";
+    private int flag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

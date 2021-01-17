@@ -24,7 +24,7 @@ public class createMovementActivity extends AppCompatActivity implements CreateM
     private ImageView credImage;
 
     private Credential credential;
-    private String mUrlAPI = "http://192.168.1.68:8080";
+    private String mUrlAPI = "http://192.168.1.107:8080";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

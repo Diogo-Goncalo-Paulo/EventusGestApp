@@ -19,7 +19,7 @@ public class CredentialListAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<Credential> credentials;
-    private String mUrlAPI = "http://192.168.1.68:8080";
+    private String mUrlAPI = "http://192.168.1.107:8080";
 
     public CredentialListAdapter(Context context, ArrayList<Credential> credentials) {
         this.context = context;

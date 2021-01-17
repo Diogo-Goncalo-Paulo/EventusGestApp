@@ -94,9 +94,9 @@ NavigationView.OnNavigationItemSelectedListener {
     }
 
     private void carregarFragmentoInicial() {
-        navigationView.setCheckedItem(R.id.nav_credenciais);
-        Fragment fragment = new CredentialFragment();
-        setTitle("Credenciais");
+        navigationView.setCheckedItem(R.id.nav_movimentos);
+        Fragment fragment = new MovementFragment();
+        setTitle("Movimentos");
         fragmentManager.beginTransaction().replace(R.id.contentFragment, fragment).commit();
     }
 
