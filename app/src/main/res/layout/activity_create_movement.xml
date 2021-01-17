@@ -23,11 +23,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:ems="10"
             android:hint="@string/ucid"
-            android:inputType="textPersonName"
-            android:importantForAutofill="no" />
+            android:importantForAutofill="no"
+            android:inputType="textPersonName" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btnSearchCred"
@@ -40,6 +40,19 @@
             android:background="@drawable/rounded_corners"
             android:onClick="onClickSearchUCID"
             app:srcCompat="@drawable/ic_search" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btnScanCred"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_corners"
+            android:onClick="onClickSearchUCID"
+            app:srcCompat="@drawable/ic_search"
+            tools:srcCompat="@drawable/ic_qr_code_scanner" />
 
     </LinearLayout>
 
