@@ -44,7 +44,6 @@ public class ViewCredentialActivity extends AppCompatActivity implements Credent
         setContentView(R.layout.activity_view_credential);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         int idd = getIntent().getIntExtra(ID, -1);
         credential = SingletonGestor.getInstance(getApplicationContext()).getCredential(idd);
 
@@ -70,7 +69,6 @@ public class ViewCredentialActivity extends AppCompatActivity implements Credent
                 startActivityForResult(intent, VER_MOVIMENTO);
             }
         });
-
 
         tvNomeCarregador = findViewById(R.id.tvNomeCarregador);
         tvTipoCarregador = findViewById(R.id.tvTipoCarregador);
@@ -128,5 +126,4 @@ public class ViewCredentialActivity extends AppCompatActivity implements Credent
         btnFlag.setEnabled(false);
         btnBlock.setEnabled(false);
     }
-
 }
