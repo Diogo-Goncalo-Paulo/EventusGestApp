@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "eventusgest";
-    private static final int DB_VERSION = 4;
+    private static final int DB_VERSION = 5;
 
     private static final String TABLE_CREDENTIALS = "credentials";
     private static final String ID_CREDENTIAL = "id";
@@ -39,11 +39,13 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String ID_AREA_FROM = "idAreaFrom";
     private static final String ID_AREA_TO = "idAreaTo";
     private static final String ID_USER = "idUser";
+    private static final String ID_EVENT_MOVEMENT = "idEvent";
     private static final String NAME_AREA_FROM = "nameAreaFrom";
     private static final String NAME_AREA_TO = "nameAreaTo";
     private static final String NAME_ACCESSPOINT = "nameAccessPoint";
     private static final String NAME_USER = "nameUser";
     private static final String NAME_CREDENTIAL = "nameCredential";
+    private static final String LAST_MOVEMENT = "lastMovement";
 
     private final SQLiteDatabase db;
 
@@ -80,12 +82,15 @@ public class DBHelper extends SQLiteOpenHelper {
                         ID_AREA_FROM + " INTEGER NOT NULL, " +
                         ID_AREA_TO + " INTEGER NOT NULL, " +
                         ID_USER + " INTEGER NOT NULL, " +
+                        ID_EVENT_MOVEMENT + " INTEGER NOT NULL, " +
                         TIME + " TEXT NOT NULL, " +
                         NAME_AREA_FROM + " TEXT NOT NULL, " +
                         NAME_AREA_TO + " TEXT NOT NULL, " +
                         NAME_ACCESSPOINT + " TEXT NOT NULL, " +
                         NAME_USER + " TEXT NOT NULL, " +
-                        NAME_CREDENTIAL + " TEXT NOT NULL); ";
+                        NAME_CREDENTIAL + " TEXT NOT NULL, " +
+                        LAST_MOVEMENT + " INTEGER NOT NULL); ";
+
         db.execSQL(sqlCreateTableMovement);
         db.execSQL(sqlCreateTableCredential);
     }
@@ -151,12 +156,14 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(ID_AREA_FROM, movement.getIdAreaFrom());
         values.put(ID_AREA_TO, movement.getIdAreaTo());
         values.put(ID_USER, movement.getIdUser());
+        values.put(ID_EVENT_MOVEMENT, movement.getIdEvent());
         values.put(TIME, movement.getTime());
         values.put(NAME_AREA_FROM, movement.getNameAreaFrom());
         values.put(NAME_AREA_TO, movement.getNameAreaTo());
         values.put(NAME_ACCESSPOINT, movement.getNameAccessPoint());
         values.put(NAME_USER, movement.getNameUser());
         values.put(NAME_CREDENTIAL, movement.getNameCredential());
+        values.put(LAST_MOVEMENT, movement.getLastMovement());
 
         long id = this.db.insert(TABLE_MOVEMENTS, null, values);
 
@@ -175,7 +182,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Movement auxMovement = new Movement(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getString(6),cursor.getString(7),cursor.getString(8),cursor.getString(9),cursor.getString(10),cursor.getString(11));
+                Movement auxMovement = new Movement(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6),cursor.getString(7),cursor.getString(8),cursor.getString(9),cursor.getString(10),cursor.getString(11),cursor.getString(11),cursor.getInt(12));
                 movements.add(auxMovement);
             }
             while (cursor.moveToNext());

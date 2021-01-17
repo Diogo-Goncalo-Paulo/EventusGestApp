@@ -27,14 +27,16 @@ public class MovementJsonParser {
                     int idAreaFrom = movement.getInt("idAreaFrom");
                     int idAreaTo = movement.getInt("idAreaTo");
                     int idUser = movement.getInt("idUser");
+                    int idEvent = movement.getInt("idEvent");
                     String time = movement.getString("time");
                     String nameAreaFrom = movement.getString("nameAreaFrom");
-                    String nameAreaTo = movement.getString("nameAreaTo");;
-                    String nameAccessPoint = movement.getString("nameAccessPoint");;
-                    String nameUser = movement.getString("nameUser");;
-                    String nameCredential = movement.getString("nameCredential");;
+                    String nameAreaTo = movement.getString("nameAreaTo");
+                    String nameAccessPoint = movement.getString("nameAccessPoint");
+                    String nameUser = movement.getString("nameUser");
+                    String nameCredential = movement.getString("nameCredential");
+                    boolean lastMovement = movement.getBoolean("lastMovement");
 
-                    Movement m = new Movement(id, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser,time,nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser,nameCredential);
+                    Movement m = new Movement(id, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser,idEvent,time,nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser,nameCredential,lastMovement ? 1 : 0);
                     movements.add(m);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -55,14 +57,16 @@ public class MovementJsonParser {
             int idAreaFrom = movement.getInt("idAreaFrom");
             int idAreaTo = movement.getInt("idAreaTo");
             int idUser = movement.getInt("idUser");
+            int idEvent = movement.getInt("idEvent");
             String time = movement.getString("time");
             String nameAreaFrom = movement.getString("nameAreaFrom");
-            String nameAreaTo = movement.getString("nameAreaTo");;
-            String nameAccessPoint = movement.getString("nameAccessPoint");;
-            String nameUser = movement.getString("nameUser");;
-            String nameCredential = movement.getString("nameCredential");;
+            String nameAreaTo = movement.getString("nameAreaTo");
+            String nameAccessPoint = movement.getString("nameAccessPoint");
+            String nameUser = movement.getString("nameUser");
+            String nameCredential = movement.getString("nameCredential");
+            boolean lastMovement = movement.getBoolean("lastMovement");
 
-            auxMovement = new Movement(id, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser, time,nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser,nameCredential);
+            auxMovement = new Movement(id, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser,idEvent, time,nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser,nameCredential,lastMovement ? 1 : 0);
         } catch (JSONException e) {
             e.printStackTrace();
         }

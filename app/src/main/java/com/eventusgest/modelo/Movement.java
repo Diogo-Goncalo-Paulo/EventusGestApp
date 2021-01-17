@@ -4,32 +4,24 @@ import java.util.Date;
 
 public class Movement {
 
-    private int id, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser;
-    private String time,nameAreaFrom,nameAreaTo,nameAccessPoint,nameUser,nameCredential;
+    private int id, idCredential, idAccessPoint, idAreaFrom, idAreaTo, idUser, idEvent,lastMovement;
+    private String time, nameAreaFrom, nameAreaTo, nameAccessPoint, nameUser, nameCredential;
 
-
-    public Movement(int id, int idCredential, int idAccessPoint, int idAreaFrom, int idAreaTo, int idUser, String time, String nameAreaFrom, String nameAreaTo, String nameAccessPoint, String nameUser, String nameCredential) {
+    public Movement(int id, int idCredential, int idAccessPoint, int idAreaFrom, int idAreaTo, int idUser, int idEvent, String time, String nameAreaFrom, String nameAreaTo, String nameAccessPoint, String nameUser, String nameCredential, int lastMovement) {
         this.id = id;
         this.idCredential = idCredential;
         this.idAccessPoint = idAccessPoint;
         this.idAreaFrom = idAreaFrom;
         this.idAreaTo = idAreaTo;
         this.idUser = idUser;
+        this.idEvent = idEvent;
         this.time = time;
         this.nameAreaFrom = nameAreaFrom;
         this.nameAreaTo = nameAreaTo;
         this.nameAccessPoint = nameAccessPoint;
         this.nameUser = nameUser;
         this.nameCredential = nameCredential;
-
-    }
-
-    public String getNameCredential() {
-        return nameCredential;
-    }
-
-    public void setNameCredential(String nameCredential) {
-        this.nameCredential = nameCredential;
+        this.lastMovement = lastMovement;
     }
 
     public int getId() {
@@ -80,6 +72,14 @@ public class Movement {
         this.idUser = idUser;
     }
 
+    public int getIdEvent() {
+        return idEvent;
+    }
+
+    public void setIdEvent(int idEvent) {
+        this.idEvent = idEvent;
+    }
+
     public String getTime() {
         return time;
     }
@@ -119,4 +119,22 @@ public class Movement {
     public void setNameUser(String nameUser) {
         this.nameUser = nameUser;
     }
+
+    public String getNameCredential() {
+        return nameCredential;
+    }
+
+    public void setNameCredential(String nameCredential) {
+        this.nameCredential = nameCredential;
+    }
+
+    public int getLastMovement() {
+        return lastMovement;
+    }
+
+    public void setLastMovement(int lastMovement) {
+        this.lastMovement = lastMovement;
+    }
 }
+
+
