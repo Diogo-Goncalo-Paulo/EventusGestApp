@@ -40,7 +40,7 @@ public class ViewMovementActivity extends AppCompatActivity implements AreasLeft
         int id = getIntent().getIntExtra(ID, -1);
         movement = SingletonGestor.getInstance(getApplicationContext()).getMovement(id);
 
-        SingletonGestor.getInstance(this).setAreasLeftListenerr(this);
+        //SingletonGestor.getInstance(this).setAreasLeftListener(this);
 
 
         tvUCID = findViewById(R.id.tvUCID);

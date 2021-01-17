@@ -178,7 +178,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public ArrayList<Movement> getAllMovementsDB() {
         ArrayList<Movement> movements = new ArrayList<>();
-        Cursor cursor = this.db.query(TABLE_MOVEMENTS, new String[]{ID_MOVEMENT, ID_CREDENTIAL_MOV, ID_ACCESSPOINT, ID_AREA_FROM, ID_AREA_TO, ID_USER, TIME, NAME_AREA_FROM, NAME_AREA_TO, NAME_ACCESSPOINT, NAME_USER, NAME_CREDENTIAL}, null, null, null, null, null);
+        Cursor cursor = this.db.query(TABLE_MOVEMENTS, new String[]{ID_MOVEMENT, ID_CREDENTIAL_MOV, ID_ACCESSPOINT, ID_AREA_FROM, ID_AREA_TO, ID_USER, TIME, NAME_AREA_FROM, NAME_AREA_TO, NAME_ACCESSPOINT, NAME_USER, NAME_CREDENTIAL, LAST_MOVEMENT}, null, null, null, null, null);
 
         if (cursor.moveToFirst()) {
             do {
