@@ -28,7 +28,7 @@ public class ViewMovementActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_credential);
+        setContentView(R.layout.activity_view_movement);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         int id = getIntent().getIntExtra(ID, -1);

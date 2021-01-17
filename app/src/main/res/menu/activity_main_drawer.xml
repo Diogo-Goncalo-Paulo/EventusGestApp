@@ -12,6 +12,10 @@
             android:id="@+id/nav_credenciais"
             android:icon="@drawable/ic_credential"
             android:title="@string/credenciais" />
+        <item
+            android:id="@+id/nav_scan"
+            android:icon="@drawable/ic_credential"
+            android:title="Scan" />
     </group>
     <item android:title="Opções">
         <menu>
