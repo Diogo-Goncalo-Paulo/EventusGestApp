@@ -620,6 +620,39 @@ public class SingletonGestor {
         }
     }
 
+    public void deleteMovementAPI(final Context context, int movementId) {
+        if (APIUrl == null)
+            setAPIUrl(context);
+        String url = APIUrl + APIPathMovements + movementId;
+        if (!Utility.hasInternetConnection(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+        } else {
+            StringRequest req = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    if (changeMovementListener != null)
+                        changeMovementListener.onDeleteMovement();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println(error.getMessage());
+                }
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+
+                    headers.put("Authorization", "Basic " + authKey);
+                    return headers;
+                }
+            };
+            volleyQueue.add(req);
+        }
+    }
+
+
+
     public Movement getMovement(int id) {
         for (Movement c : movements)
             if (c.getId() == id)

@@ -120,4 +120,10 @@ public class MovementFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         super.onCreateOptionsMenu(menu, inflater);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        onRefresh();
+    }
 }

@@ -123,7 +123,25 @@ public class ViewMovementActivity extends AppCompatActivity implements AreasLeft
     }
 
     public void onClickDeleteMovement(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle("Remover Movimento");
+        builder.setMessage("Tem a certeza que quer remover este movimento?");
+        builder.setPositiveButton(getString(R.string.confirmar),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SingletonGestor.getInstance(builder.getContext()).deleteMovementAPI(builder.getContext(),movement.getId());
+                    }
+                });
+        builder.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
 
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 
@@ -159,6 +177,6 @@ public class ViewMovementActivity extends AppCompatActivity implements AreasLeft
 
     @Override
     public void onDeleteMovement() {
-
+        ViewMovementActivity.this.finish();
     }
 }
