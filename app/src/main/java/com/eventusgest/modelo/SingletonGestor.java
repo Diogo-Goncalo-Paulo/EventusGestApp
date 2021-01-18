@@ -8,7 +8,6 @@ import android.util.Base64;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -630,6 +629,7 @@ public class SingletonGestor {
             StringRequest req = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
+                    System.out.println("API CALL RESPONSE");
                     if (changeMovementListener != null)
                         changeMovementListener.onDeleteMovement();
                 }

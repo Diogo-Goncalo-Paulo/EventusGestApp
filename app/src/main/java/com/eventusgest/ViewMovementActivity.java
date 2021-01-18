@@ -11,17 +11,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.eventusgest.listeners.AreasLeftListener;
 import com.eventusgest.listeners.ChangeMovementListener;
-import com.eventusgest.listeners.MovementListener;
 import com.eventusgest.modelo.Area;
 import com.eventusgest.modelo.Movement;
 import com.eventusgest.modelo.SingletonGestor;
 import com.eventusgest.utils.AreaJsonParser;
 import com.eventusgest.utils.MovementJsonParser;
-import com.eventusgest.utils.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -61,6 +58,7 @@ public class ViewMovementActivity extends AppCompatActivity implements AreasLeft
         movement = SingletonGestor.getInstance(getApplicationContext()).getMovement(id);
 
         SingletonGestor.getInstance(this).setAreasLeftListener(this);
+        SingletonGestor.getInstance(this).setChangeMovementListener(this);
 
 
         tvUCID = findViewById(R.id.tvUCID);
@@ -189,6 +187,7 @@ public class ViewMovementActivity extends AppCompatActivity implements AreasLeft
 
     @Override
     public void onDeleteMovement() {
+        System.out.println("DELETED?");
         ViewMovementActivity.this.finish();
     }
 }
