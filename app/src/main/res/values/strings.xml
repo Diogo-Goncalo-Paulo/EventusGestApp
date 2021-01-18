@@ -28,4 +28,5 @@
     <string name="guardar">Guardar</string>
     <string name="confirmar">Confirmar</string>
     <string name="cancelar">Cancelar</string>
+    <string name="criar_movimento">Criar Movimento</string>
 </resources>

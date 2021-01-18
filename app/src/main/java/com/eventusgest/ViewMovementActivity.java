@@ -75,7 +75,7 @@ public class ViewMovementActivity extends AppCompatActivity implements AreasLeft
     }
 
     private void carregarInfo () {
-        SharedPreferences sharedPref = this.getSharedPreferences(USER_ID, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getSharedPreferences(USER, Context.MODE_PRIVATE);
 
         tvUCID.setText(movement.getNameCredential());
         tvAccessPoint.setText(movement.getNameAccessPoint());
@@ -83,8 +83,9 @@ public class ViewMovementActivity extends AppCompatActivity implements AreasLeft
         tvTimeMov.setText(movement.getTime());
         tvPorteiro.setText(movement.getNameUser());
         if(movement.getLastMovement() == 1){
-            if(sharedPref.getInt(USER_ID,-1) == movement.getIdUser())
-            btnDeleteMov.setEnabled(true);
+            if(sharedPref.getInt(USER_ID,-1) == movement.getIdUser()) {
+                btnDeleteMov.setEnabled(true);
+            }
             if(sharedPref.getString(USER_ROLE, USER_ROLE).equals("admin")){
                 btnSaveMov.setEnabled(true);
             }
