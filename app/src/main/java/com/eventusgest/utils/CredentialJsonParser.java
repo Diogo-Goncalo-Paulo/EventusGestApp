@@ -46,7 +46,14 @@ public class CredentialJsonParser {
                     JSONObject entityType = new JSONObject(entity.getString("entityType"));
                     String entityTypeName = entityType.getString("name");
 
-                    Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName, carrierInfo, qrCode, entityTypeName, currentAreaName);
+                    JSONArray arr = credential.getJSONArray("accessibleAreas");
+                    int[] accessibleAreas = new int[arr.length()];
+
+                    for(int j = 0; j < arr.length(); j++){
+                        accessibleAreas[j] = arr.getInt(j);
+                    }
+
+                    Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName, carrierInfo, qrCode, entityTypeName, currentAreaName,accessibleAreas);
                     credentials.add(c);
 
                 } catch (JSONException e) {

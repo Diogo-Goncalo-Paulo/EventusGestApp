@@ -3,10 +3,11 @@ package com.eventusgest.modelo;
 public class Credential {
     private int id, idEntity, idCurrentArea, idEvent, flagged, blocked;
     private String ucid, carrierName, carrierType, carrierPhoto, carrierInfo, entityName, qrCode, entityTypeName, currentAreaName;
+    private int[] accessibleAreas;
 
     private static int autoIncrementedId = 1;
 
-    public Credential(int id, int idEntity, int idCurrentArea, int idEvent, int flagged, int blocked, String ucid, String carrierName, String carrierType, String carrierPhoto, String entityName, String carrierInfo, String qrCode, String entityTypeName, String currentAreaName) {
+    public Credential(int id, int idEntity, int idCurrentArea, int idEvent, int flagged, int blocked, String ucid, String carrierName, String carrierType, String carrierPhoto, String entityName, String carrierInfo, String qrCode, String entityTypeName, String currentAreaName,int[] accessibleAreas) {
         this.id = id;
         this.idEntity = idEntity;
         this.idCurrentArea = idCurrentArea;
@@ -22,6 +23,7 @@ public class Credential {
         this.qrCode = qrCode;
         this.entityTypeName = entityTypeName;
         this.currentAreaName = currentAreaName;
+        this.accessibleAreas = accessibleAreas;;
     }
 
     public int getId() {
@@ -144,5 +146,13 @@ public class Credential {
 
     public void setCurrentAreaName(String currentAreaName) {
         this.currentAreaName = currentAreaName;
+    }
+
+    public int[] getAccessibleAreas() {
+        return accessibleAreas;
+    }
+
+    public void setAccessibleAreas(int[] accessibleAreas) {
+        this.accessibleAreas = accessibleAreas;
     }
 }

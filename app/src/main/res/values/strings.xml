@@ -29,4 +29,6 @@
     <string name="confirmar">Confirmar</string>
     <string name="cancelar">Cancelar</string>
     <string name="criar_movimento">Criar Movimento</string>
+    <string name="movimento_impossivel">Movimento Impossivel</string>
+    <string name="sem_acceso_area">Sem acesso á area</string>
 </resources>

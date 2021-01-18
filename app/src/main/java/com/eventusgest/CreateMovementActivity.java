@@ -44,7 +44,7 @@ public class CreateMovementActivity extends AppCompatActivity implements CreateM
 
     private LinearLayout credLayout,alertLayout;
     private EditText etUCID;
-    private TextView tvUCID, tvInfo1, tvFlag, tvBlock, tvEntityName, tvEntityType, tvInfo, tvAreaFrom, tvAreaTo;
+    private TextView tvUCID, tvInfo1, tvFlag, tvBlock, tvEntityName, tvEntityType, tvInfo, tvAreaFrom, tvAreaTo, tvAlert;
     private Button btnMovement,btnFlag;
     private ImageView credImage;
     private Area areaTo;
@@ -71,6 +71,7 @@ public class CreateMovementActivity extends AppCompatActivity implements CreateM
         tvInfo = findViewById(R.id.tvInfo);
         tvAreaFrom = findViewById(R.id.tvAreaFrom);
         tvAreaTo = findViewById(R.id.tvAreaTo);
+        tvAlert = findViewById(R.id.tvAlert);
         credImage = findViewById(R.id.credImage);
 
         credLayout.setAlpha(0.0f);
@@ -134,17 +135,38 @@ public class CreateMovementActivity extends AppCompatActivity implements CreateM
 
         if(areas[0] != credential.getIdCurrentArea() && areas[1] != credential.getIdCurrentArea()){
             alertLayout.setVisibility(View.VISIBLE);
+            tvAlert.setText(R.string.movimento_impossivel);
 
         }else{
             alertLayout.setVisibility(View.INVISIBLE);
             if(areas[0] == credential.getIdCurrentArea()){
-                SingletonGestor.getInstance(this).getAreaAPI(this,areas[1]);
+                if(checkCredAccessAreas(areas[1])){
+                    SingletonGestor.getInstance(this).getAreaAPI(this,areas[1]);
+                }else{
+                    alertLayout.setVisibility(View.VISIBLE);
+                    tvAlert.setText(R.string.sem_acceso_area);
+                }
             }else{
-                SingletonGestor.getInstance(this).getAreaAPI(this,areas[0]);
+                if(checkCredAccessAreas(areas[0])){
+                    SingletonGestor.getInstance(this).getAreaAPI(this,areas[0]);
+                }else{
+                    alertLayout.setVisibility(View.VISIBLE);
+                    tvAlert.setText(R.string.sem_acceso_area);
+                }
             }
         }
 
 
+    }
+
+    public boolean checkCredAccessAreas(int areaToId){
+        boolean canAccess = false;
+        for (int area:credential.getAccessibleAreas()) {
+            if(areaToId == area){
+                canAccess = true;
+            }
+        }
+        return canAccess;
     }
 
     @Override
