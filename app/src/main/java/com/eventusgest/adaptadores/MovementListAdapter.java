@@ -20,7 +20,7 @@ public class MovementListAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<Movement> movements;
-    private String mUrlAPI = "http://192.168.1.68:8080";
+    private String mUrlAPI = "http://192.168.1.107:8080";
 
     public MovementListAdapter(Context context, ArrayList<Movement> movements) {
         this.context = context;
