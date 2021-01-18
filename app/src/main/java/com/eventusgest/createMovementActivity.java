@@ -1,8 +1,5 @@
 package com.eventusgest;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -17,6 +14,8 @@ import com.eventusgest.modelo.SingletonGestor;
 import com.eventusgest.utils.Utility;
 import com.squareup.picasso.Picasso;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 public class createMovementActivity extends AppCompatActivity implements CreateMovementListener {
     private LinearLayout credLayout;
     private EditText etUCID;
@@ -24,7 +23,7 @@ public class createMovementActivity extends AppCompatActivity implements CreateM
     private ImageView credImage;
 
     private Credential credential;
-    private String mUrlAPI = "http://192.168.1.107:8080";
+    private String mUrlAPI = "http://192.168.1.68:8080";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
