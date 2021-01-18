@@ -39,9 +39,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class CreateMovementActivity extends AppCompatActivity implements CreateMovementListener, CredentialFlagBlockListener {
-    public static final String USER = "USER_PREF_SHARED";
-    public static final String ACCESS_POINT = "ACCESS_POINT";
-    public static final String USER_ID = "USER_ID";
 
     private LinearLayout credLayout,alertLayout;
     private EditText etUCID;
@@ -193,9 +190,9 @@ public class CreateMovementActivity extends AppCompatActivity implements CreateM
     }
 
     public void chooseAreas(){
-        SharedPreferences sharedPref = this.getSharedPreferences(USER, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
 
-        SingletonGestor.getInstance(this).getAccessPointAPI(this,sharedPref.getInt(ACCESS_POINT,-1));
+        SingletonGestor.getInstance(this).getAccessPointAPI(this,sharedPref.getInt(MainActivity.ACCESS_POINT,-1));
     }
 
     @Override
@@ -246,17 +243,17 @@ public class CreateMovementActivity extends AppCompatActivity implements CreateM
     }
 
     public void onClickCreateMovement(View view) {
-        SharedPreferences sharedPref = this.getSharedPreferences(USER, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getSharedPreferences(MainActivity.USER, Context.MODE_PRIVATE);
 
         String currentDate = new SimpleDateFormat("y-M-d H:m:s", Locale.getDefault()).format(new Date());
         JSONObject jsonObject= new JSONObject();
         try {
             jsonObject.put("time", currentDate);
             jsonObject.put("idCredential", credential.getId());
-            jsonObject.put("idAccessPoint", sharedPref.getInt(ACCESS_POINT,-1));
+            jsonObject.put("idAccessPoint", sharedPref.getInt(MainActivity.ACCESS_POINT,-1));
             jsonObject.put("idAreaFrom", credential.getIdCurrentArea());
             jsonObject.put("idAreaTo", areaTo.getId());
-            jsonObject.put("idUser", sharedPref.getInt(USER_ID,-1));
+            jsonObject.put("idUser", sharedPref.getInt(MainActivity.USER_ID,-1));
         } catch (JSONException e) {
             e.printStackTrace();
             jsonObject = null;
