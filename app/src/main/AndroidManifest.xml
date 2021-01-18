@@ -18,7 +18,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".ScanQrcodeActivity" />
         <activity
-            android:name=".createMovementActivity"
+            android:name=".CreateMovementActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity" />
         <activity

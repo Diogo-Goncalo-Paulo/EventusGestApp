@@ -18,21 +18,21 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.eventusgest.adaptadores.CredentialListAdapter;
 import com.eventusgest.adaptadores.MovementListAdapter;
-import com.eventusgest.listeners.CredentialListener;
 import com.eventusgest.listeners.MovementListener;
-import com.eventusgest.modelo.Credential;
 import com.eventusgest.modelo.Movement;
 import com.eventusgest.modelo.SingletonGestor;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class MovementFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MovementListener {
     private ListView lvMovementList;
+    private FloatingActionButton fab;
     public static final String USER = "USER_PREF_SHARED";
     public static final String CURRENT_EVENT = "CURRENT_EVENT";
     private static final int VER_MOVIMENTO = 1;
+    private static final int CRIAR_MOVIMENTO = 2;
     private SearchView searchView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -46,6 +46,7 @@ public class MovementFragment extends Fragment implements SwipeRefreshLayout.OnR
         setHasOptionsMenu(true);
 
         lvMovementList = view.findViewById(R.id.lvMovementList);
+        fab = view.findViewById(R.id.fab);
 
         lvMovementList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -57,6 +58,13 @@ public class MovementFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         });
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), CreateMovementActivity.class);
+                startActivityForResult(intent, CRIAR_MOVIMENTO);
+            }
+        });
 
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);

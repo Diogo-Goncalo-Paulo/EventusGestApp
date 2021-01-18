@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class createMovementActivity extends AppCompatActivity implements CreateMovementListener {
+public class CreateMovementActivity extends AppCompatActivity implements CreateMovementListener {
     private LinearLayout credLayout;
     private EditText etUCID;
     private TextView tvUCID, tvInfo1, tvFlag, tvBlock, tvEntityName, tvEntityType, tvInfo, tvAreaFrom, tvAreaTo;
