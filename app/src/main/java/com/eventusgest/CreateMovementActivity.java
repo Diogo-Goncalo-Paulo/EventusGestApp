@@ -20,6 +20,7 @@ import com.eventusgest.modelo.Credential;
 import com.eventusgest.modelo.SingletonGestor;
 import com.eventusgest.utils.AccessPointJsonParser;
 import com.eventusgest.utils.AreaJsonParser;
+import com.eventusgest.utils.CredentialJsonParser;
 import com.eventusgest.utils.Utility;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -49,6 +50,7 @@ public class CreateMovementActivity extends AppCompatActivity implements CreateM
     private ImageView credImage;
     private Area areaTo;
     private Credential credential;
+    private int[] getAccessibleAreas;
     private String mUrlAPI = Utility.APIpath;
 
     @Override
@@ -161,7 +163,7 @@ public class CreateMovementActivity extends AppCompatActivity implements CreateM
 
     public boolean checkCredAccessAreas(int areaToId){
         boolean canAccess = false;
-        for (int area:credential.getAccessibleAreas()) {
+        for (int area:getAccessibleAreas) {
             if(areaToId == area){
                 canAccess = true;
             }
@@ -183,6 +185,11 @@ public class CreateMovementActivity extends AppCompatActivity implements CreateM
     @Override
     public void onCreateMovement() {
         finish();
+    }
+
+    @Override
+    public void onGetCredential(JSONArray credential) {
+        getAccessibleAreas = CredentialJsonParser.parserJsonAccessibleArea(credential);
     }
 
     public void chooseAreas(){

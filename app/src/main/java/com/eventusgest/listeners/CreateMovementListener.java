@@ -10,4 +10,5 @@ public interface CreateMovementListener {
     void onGetAccessPoint(JSONObject accessPoint);
     void onGetArea(JSONArray area);
     void onCreateMovement();
+    void onGetCredential(JSONArray credential);
 }

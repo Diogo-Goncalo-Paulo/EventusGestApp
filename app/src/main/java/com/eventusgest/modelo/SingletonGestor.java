@@ -240,6 +240,7 @@ public class SingletonGestor {
 
                     if (createMovementListener != null) {
                         createMovementListener.onSearchUCID(credentials.get(0).getUcid());
+                        createMovementListener.onGetCredential(response);
                     }
                 }
             }, new Response.ErrorListener() {

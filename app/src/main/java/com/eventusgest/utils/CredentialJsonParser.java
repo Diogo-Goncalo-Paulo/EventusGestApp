@@ -1,6 +1,9 @@
 package com.eventusgest.utils;
 
+import com.eventusgest.modelo.AccessPoint;
+import com.eventusgest.modelo.Area;
 import com.eventusgest.modelo.Credential;
+import com.eventusgest.modelo.Movement;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,7 +56,7 @@ public class CredentialJsonParser {
                         accessibleAreas[j] = arr.getInt(j);
                     }
 
-                    Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName, carrierInfo, qrCode, entityTypeName, currentAreaName,accessibleAreas);
+                    Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName, carrierInfo, qrCode, entityTypeName, currentAreaName);
                     credentials.add(c);
 
                 } catch (JSONException e) {
@@ -63,6 +66,28 @@ public class CredentialJsonParser {
         }
 
         return credentials;
+    }
+
+    public static int[] parserJsonAccessibleArea(JSONArray response) {
+
+        if (response != null) {
+            try {
+                JSONObject movement = (JSONObject) response.get(0);
+
+                JSONArray arr = movement.getJSONArray("accessibleAreas");
+                int[] accessibleAreas = new int[arr.length()];
+
+                for(int i = 0; i < arr.length(); i++){
+                    accessibleAreas[i] = arr.getInt(i);
+                }
+
+                return accessibleAreas;
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     /*public static Credential parserJsonCredential(String response) {
