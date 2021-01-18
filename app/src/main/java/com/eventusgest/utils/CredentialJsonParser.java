@@ -48,6 +48,7 @@ public class CredentialJsonParser {
 
                     Credential c = new Credential(id, idEntity, idCurrentArea, idEvent, flagged, blocked, ucid, carrierName, carrierTypeName, carrierPhoto, entityName, carrierInfo, qrCode, entityTypeName, currentAreaName);
                     credentials.add(c);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

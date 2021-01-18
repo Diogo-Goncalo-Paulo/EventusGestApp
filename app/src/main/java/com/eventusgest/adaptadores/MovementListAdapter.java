@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.eventusgest.R;
 import com.eventusgest.ViewCredentialActivity;
 import com.eventusgest.modelo.Movement;
+import com.eventusgest.utils.Utility;
 
 import java.util.ArrayList;
 
@@ -20,7 +21,7 @@ public class MovementListAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<Movement> movements;
-    private String mUrlAPI = "http://192.168.1.107:8080";
+    private String mUrlAPI = Utility.APIpath;
 
     public MovementListAdapter(Context context, ArrayList<Movement> movements) {
         this.context = context;
