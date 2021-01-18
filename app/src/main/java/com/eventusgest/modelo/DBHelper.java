@@ -178,11 +178,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public ArrayList<Movement> getAllMovementsDB() {
         ArrayList<Movement> movements = new ArrayList<>();
-        Cursor cursor = this.db.query(TABLE_MOVEMENTS, new String[]{ID_MOVEMENT, ID_CREDENTIAL_MOV, ID_ACCESSPOINT, ID_AREA_FROM, ID_AREA_TO, ID_USER, TIME, NAME_AREA_FROM, NAME_AREA_TO, NAME_ACCESSPOINT, NAME_USER, NAME_CREDENTIAL, LAST_MOVEMENT}, null, null, null, null, null);
+        Cursor cursor = this.db.query(TABLE_MOVEMENTS, new String[]{ID_MOVEMENT, ID_CREDENTIAL_MOV, ID_ACCESSPOINT, ID_AREA_FROM, ID_AREA_TO, ID_USER, ID_EVENT_MOVEMENT, TIME, NAME_AREA_FROM, NAME_AREA_TO, NAME_ACCESSPOINT, NAME_USER, NAME_CREDENTIAL, LAST_MOVEMENT}, null, null, null, null, null);
 
         if (cursor.moveToFirst()) {
             do {
-                Movement auxMovement = new Movement(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6),cursor.getString(7),cursor.getString(8),cursor.getString(9),cursor.getString(10),cursor.getString(11),cursor.getString(11),cursor.getInt(12));
+                Movement auxMovement = new Movement(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6),cursor.getString(7),cursor.getString(8),cursor.getString(9),cursor.getString(10),cursor.getString(11),cursor.getString(12),cursor.getInt(13));
                 movements.add(auxMovement);
             }
             while (cursor.moveToNext());
