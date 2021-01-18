@@ -213,7 +213,7 @@ public class CreateMovementActivity extends AppCompatActivity implements CreateM
                 if (!Utility.hasInternetConnection(this)) {
                     Toast.makeText(this, R.string.noInternet, Toast.LENGTH_SHORT).show();
                 } else {
-                    SingletonGestor.getInstance(getApplicationContext()).getCredentialAPI(getApplicationContext(), result.getContents());
+                    SingletonGestor.getInstance(this).getCredentialAPI(this, result.getContents());
                 }
             }
         }
