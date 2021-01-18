@@ -414,7 +414,7 @@ public class SingletonGestor {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, "Ocurreu um erro!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Ocorreu um erro!", Toast.LENGTH_SHORT).show();
                     System.out.println(error.getMessage());
                 }
             }) {
@@ -449,7 +449,7 @@ public class SingletonGestor {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, "Ocurreu um erro!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Ocorreu um erro!", Toast.LENGTH_SHORT).show();
                     System.out.println(error.getMessage());
                 }
             }) {
@@ -489,7 +489,7 @@ public class SingletonGestor {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, "Ocurreu um erro!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Ocorreu um erro!", Toast.LENGTH_SHORT).show();
                     System.out.println(error.getMessage());
                 }
             }) {

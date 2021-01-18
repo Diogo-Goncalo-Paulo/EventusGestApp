@@ -44,6 +44,10 @@ public class ViewMovementActivity extends AppCompatActivity implements AreasLeft
 
     private TextView tvUCID, tvAccessPoint, tvAreaFrom,tvTimeMov,tvPorteiro;
     private Spinner spinnerAreaTo;
+    private AppCompatImageButton btnBlock;
+    private ImageView profilePicture;
+    private String mUrlAPI = "http://192.168.1.107:8080";
+    private int flag = 0;
     private Button btnDeleteMov, btnSaveMov;
 
     @Override
