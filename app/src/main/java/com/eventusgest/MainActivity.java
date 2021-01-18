@@ -113,16 +113,12 @@ NavigationView.OnNavigationItemSelectedListener {
                 fragment = new CredentialFragment();
                 setTitle(item.getTitle());
                 break;
-            case R.id.nav_scan:
-                Intent intent = new Intent(MainActivity.this, ScanQrcodeActivity.class);
-                startActivity(intent);
-                break;
             case R.id.nav_settings:
                 fragment = new SettingsFragment();
                 setTitle(item.getTitle());
                 break;
             case R.id.nav_logout:
-                intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
                 break;
         }
