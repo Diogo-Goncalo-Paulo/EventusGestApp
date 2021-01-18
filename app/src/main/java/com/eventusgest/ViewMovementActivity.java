@@ -19,6 +19,7 @@ import com.eventusgest.modelo.Movement;
 import com.eventusgest.modelo.SingletonGestor;
 import com.eventusgest.utils.AreaJsonParser;
 import com.eventusgest.utils.MovementJsonParser;
+import com.eventusgest.utils.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,10 +43,6 @@ public class ViewMovementActivity extends AppCompatActivity implements AreasLeft
 
     private TextView tvUCID, tvAccessPoint, tvAreaFrom,tvTimeMov,tvPorteiro;
     private Spinner spinnerAreaTo;
-    private AppCompatImageButton btnBlock;
-    private ImageView profilePicture;
-    private String mUrlAPI = "http://192.168.1.107:8080";
-    private int flag = 0;
     private Button btnDeleteMov, btnSaveMov;
 
     @Override

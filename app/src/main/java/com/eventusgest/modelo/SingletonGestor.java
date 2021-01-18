@@ -85,7 +85,7 @@ public class SingletonGestor {
         if (sharedPrefUser != null) {
             if (!sharedPrefUser.contains(MainActivity.API_URL)) {
                 SharedPreferences.Editor editor = sharedPrefUser.edit();
-                editor.putString(MainActivity.API_URL, "http://192.168.1.97:8080/backend/web/api");
+                editor.putString(MainActivity.API_URL, Utility.APIpath+"/backend/web/api");
                 editor.apply();
             }
             APIUrl = sharedPrefUser.getString(MainActivity.API_URL, MainActivity.API_URL);

@@ -16,6 +16,7 @@ import com.eventusgest.listeners.MovementListener;
 import com.eventusgest.modelo.Credential;
 import com.eventusgest.modelo.Movement;
 import com.eventusgest.modelo.SingletonGestor;
+import com.eventusgest.utils.Utility;
 import com.squareup.picasso.Picasso;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,7 +36,7 @@ public class ViewCredentialActivity extends AppCompatActivity implements Credent
     private Button btnFlag;
     private AppCompatImageButton btnBlock;
     private ImageView profilePicture;
-    private String mUrlAPI = "http://192.168.1.107:8080";
+    private String mUrlAPI = Utility.APIpath;
     private int flag = 0;
 
     @Override
