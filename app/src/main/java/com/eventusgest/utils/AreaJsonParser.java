@@ -30,4 +30,22 @@ public class AreaJsonParser {
         }
         return areas;
     }
+
+    public static Area parserJsonArea(JSONArray response) {
+        Area auxArea = null;
+
+        if (response != null) {
+            try {
+                JSONObject area = (JSONObject) response.get(0);
+                int id = area.getInt("id");
+                String name = area.getString("name");
+
+                auxArea = new Area(id,name);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return auxArea;
+    }
 }

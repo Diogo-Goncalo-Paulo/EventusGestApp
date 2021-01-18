@@ -58,6 +58,8 @@ public class SingletonGestor {
     private final static String APIPathMovements = "/movement/";
     private final static String APIPathUserEvents = "/event/user/";
     private final static String APIPathAccessPointEvent = "/accesspoint/event/";
+    private final static String APIPathAreas = "/area/";
+    private final static String APIPathAccessPoint = "/accesspoint/";
     private final static String APIPathAreasLeft = "/accesspoint/area/";
 
     private static RequestQueue volleyQueue;
@@ -429,6 +431,39 @@ public class SingletonGestor {
         }
     }
 
+    public void getAccessPointAPI(final Context context, int accesspointId) {
+        if (APIUrl == null)
+            setAPIUrl(context);
+        String url = APIUrl + APIPathAccessPoint + accesspointId;
+        if (!Utility.hasInternetConnection(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+        } else {
+            JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    if (createMovementListener != null)
+                        createMovementListener.onGetAccessPoint(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, "Ocorreu um erro!", Toast.LENGTH_SHORT).show();
+                    System.out.println(error.getMessage());
+                }
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Basic " + authKey);
+                    return headers;
+                }
+            };
+
+            volleyQueue.add(req);
+        }
+    }
+
+
+
     public void updateUserEvent(final Context context, final String event) {
         if (APIUrl == null)
             setAPIUrl(context);
@@ -587,6 +622,37 @@ public class SingletonGestor {
         }
     }
 
+    public void getAreaAPI(final Context context, int areaId) {
+        if (APIUrl == null)
+            setAPIUrl(context);
+        String url = APIUrl + APIPathAreas + areaId;
+        if (!Utility.hasInternetConnection(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+        } else {
+            JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    if (createMovementListener != null)
+                        createMovementListener.onGetArea(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println(error.getMessage());
+                }
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+
+                    headers.put("Authorization", "Basic " + authKey);
+                    return headers;
+                }
+            };
+            volleyQueue.add(req);
+        }
+    }
+
     public void updateMovementAPI(final Context context, JSONObject movement, int movementId) {
         if (APIUrl == null)
             setAPIUrl(context);
@@ -599,6 +665,38 @@ public class SingletonGestor {
                 public void onResponse(JSONObject response) {
                     if (changeMovementListener != null)
                         changeMovementListener.onUpdateMovement(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println(error.getMessage());
+                }
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+
+                    headers.put("Authorization", "Basic " + authKey);
+                    headers.put("Content-Type","application/json");
+                    return headers;
+                }
+            };
+            volleyQueue.add(req);
+        }
+    }
+
+    public void createMovementAPI(final Context context, JSONObject movement) {
+        if (APIUrl == null)
+            setAPIUrl(context);
+        String url = APIUrl + "/movement";
+        if (!Utility.hasInternetConnection(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+        } else {
+            JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, movement, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    if (createMovementListener != null)
+                        createMovementListener.onCreateMovement();
                 }
             }, new Response.ErrorListener() {
                 @Override

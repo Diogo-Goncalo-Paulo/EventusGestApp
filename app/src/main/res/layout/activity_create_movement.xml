@@ -46,10 +46,11 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
-            android:layout_marginEnd="15dp"
             android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_corners"
+            android:onClick="onClickScan"
             app:srcCompat="@drawable/ic_qr_code_scanner"
             tools:srcCompat="@drawable/ic_qr_code_scanner" />
 
@@ -267,7 +268,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/alert"
-            android:padding="15dp">
+            android:padding="15dp"
+            android:visibility="invisible">
 
             <ImageView
                 android:id="@+id/alertIcon"
@@ -302,8 +304,11 @@
             android:layout_marginEnd="15dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_corners"
-            android:text="Criar Movimento"
-            android:textSize="20sp" />
+            android:enabled="false"
+            android:onClick="onClickCreateMovement"
+            android:text="@string/criar_movimento"
+            android:textSize="20sp"
+            android:visibility="visible" />
 
         <Button
             android:id="@+id/btn_flag"
@@ -314,6 +319,7 @@
             android:layout_marginEnd="55dp"
             android:layout_marginBottom="15dp"
             android:background="@drawable/rounded_corners"
+            android:onClick="onClickFlag"
             android:text="@string/marcar_credencial"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="18sp" />
