@@ -118,7 +118,7 @@ public class ViewCredentialActivity extends AppCompatActivity implements Credent
 
     @Override
     public void onFlagCredential(Credential credential) {
-        btnFlag.setText(String.valueOf(credential.getFlagged()));
+        btnFlag.setText(""+credential.getFlagged());
     }
 
     @Override
