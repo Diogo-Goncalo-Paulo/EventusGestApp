@@ -158,7 +158,7 @@ public class ViewMovementActivity extends AppCompatActivity implements AreasLeft
 
 
     public void onClickUpdateMovement(View view) {
-        SharedPreferences sharedPref = this.getSharedPreferences(USER_ID, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getSharedPreferences(USER, Context.MODE_PRIVATE);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
