@@ -1,6 +1,7 @@
 package com.eventusgest.adaptadores;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.eventusgest.MainActivity;
 import com.eventusgest.R;
 import com.eventusgest.modelo.Credential;
+import com.eventusgest.utils.Utility;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -19,7 +22,7 @@ public class CredentialListAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<Credential> credentials;
-    private String mUrlAPI = "http://192.168.1.107:8080";
+    private String mUrlAPI;
 
     public CredentialListAdapter(Context context, ArrayList<Credential> credentials) {
         this.context = context;
@@ -43,6 +46,8 @@ public class CredentialListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        mUrlAPI = Utility.APIpath;
+
         if (inflater == null)
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
