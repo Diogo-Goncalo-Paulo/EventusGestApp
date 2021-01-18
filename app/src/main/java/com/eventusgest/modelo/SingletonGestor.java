@@ -19,6 +19,7 @@ import com.android.volley.toolbox.Volley;
 import com.eventusgest.MainActivity;
 import com.eventusgest.R;
 import com.eventusgest.listeners.AccessPointListener;
+import com.eventusgest.listeners.AreasLeftListener;
 import com.eventusgest.listeners.CreateMovementListener;
 import com.eventusgest.listeners.CredentialFlagBlockListener;
 import com.eventusgest.listeners.CredentialListener;
@@ -56,6 +57,7 @@ public class SingletonGestor {
     private final static String APIPathMovements = "/movement";
     private final static String APIPathUserEvents = "/event/user/";
     private final static String APIPathAccessPointEvent = "/accesspoint/event/";
+    private final static String APIPathAreasLeft = "/accesspoint/area/";
 
     private static RequestQueue volleyQueue;
     private CredentialListener credentialListener;
@@ -65,6 +67,7 @@ public class SingletonGestor {
     private EventUserListener eventUserListener;
     private AccessPointListener accessPointListener;
     private CreateMovementListener createMovementListener;
+    private AreasLeftListener areasLeftListener;
     private String authKey;
 
     public static synchronized SingletonGestor getInstance(Context context) {
@@ -113,6 +116,10 @@ public class SingletonGestor {
 
     public void setCreateMovementListener(CreateMovementListener createMovementListener) {
         this.createMovementListener = createMovementListener;
+    }
+
+    public void setAreasLeftListener(AreasLeftListener areasLeftListener) {
+        this.areasLeftListener = areasLeftListener;
     }
 
     public SingletonGestor(Context context) {
@@ -541,6 +548,37 @@ public class SingletonGestor {
             }
         };
         volleyQueue.add(req);
+    }
+
+    public void getAreasLeft(final Context context, int areaId) {
+        if (APIUrl == null)
+            setAPIUrl(context);
+        String url = APIUrl + APIPathAreasLeft + areaId;
+        if (!Utility.hasInternetConnection(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+        } else {
+            JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    if (areasLeftListener != null)
+                        areasLeftListener.onGetAreasLeft(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println(error.getMessage());
+                }
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+
+                    headers.put("Authorization", "Basic " + authKey);
+                    return headers;
+                }
+            };
+            volleyQueue.add(req);
+        }
     }
 
     public Movement getMovement(int id) {
