@@ -14,12 +14,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.eventusgest.MainActivity;
 import com.eventusgest.R;
 import com.eventusgest.listeners.AccessPointListener;
 import com.eventusgest.listeners.AreasLeftListener;
+import com.eventusgest.listeners.ChangeMovementListener;
 import com.eventusgest.listeners.CreateMovementListener;
 import com.eventusgest.listeners.CredentialFlagBlockListener;
 import com.eventusgest.listeners.CredentialListener;
@@ -54,7 +56,7 @@ public class SingletonGestor {
     private final static String APIPAthUpdateUserEvent = "/user/event/";
     private final static String APIPAthUpdateUserAccessPoint = "/user/accesspoint/";
     private final static String APIPathCredential = "/credential";
-    private final static String APIPathMovements = "/movement";
+    private final static String APIPathMovements = "/movement/";
     private final static String APIPathUserEvents = "/event/user/";
     private final static String APIPathAccessPointEvent = "/accesspoint/event/";
     private final static String APIPathAreasLeft = "/accesspoint/area/";
@@ -63,6 +65,7 @@ public class SingletonGestor {
     private CredentialListener credentialListener;
     private CredentialFlagBlockListener credentialFlagBlockListener;
     private MovementListener movementListener;
+    private ChangeMovementListener changeMovementListener;
     private LoginListener loginListener;
     private EventUserListener eventUserListener;
     private AccessPointListener accessPointListener;
@@ -83,7 +86,7 @@ public class SingletonGestor {
         if (sharedPrefUser != null) {
             if (!sharedPrefUser.contains(MainActivity.API_URL)) {
                 SharedPreferences.Editor editor = sharedPrefUser.edit();
-                editor.putString(MainActivity.API_URL, "http://192.168.1.107:8080/backend/web/api");
+                editor.putString(MainActivity.API_URL, "http://192.168.1.97:8080/backend/web/api");
                 editor.apply();
             }
             APIUrl = sharedPrefUser.getString(MainActivity.API_URL, MainActivity.API_URL);
@@ -120,6 +123,10 @@ public class SingletonGestor {
 
     public void setAreasLeftListener(AreasLeftListener areasLeftListener) {
         this.areasLeftListener = areasLeftListener;
+    }
+
+    public void setChangeMovementListener(ChangeMovementListener changeMovementListener) {
+        this.changeMovementListener = changeMovementListener;
     }
 
     public SingletonGestor(Context context) {
@@ -580,6 +587,71 @@ public class SingletonGestor {
             volleyQueue.add(req);
         }
     }
+
+    public void updateMovementAPI(final Context context, JSONObject movement, int movementId) {
+        if (APIUrl == null)
+            setAPIUrl(context);
+        String url = APIUrl + APIPathMovements + movementId;
+        if (!Utility.hasInternetConnection(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+        } else {
+            JsonObjectRequest req = new JsonObjectRequest(Request.Method.PUT, url, movement, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    if (changeMovementListener != null)
+                        changeMovementListener.onUpdateMovement(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println(error.getMessage());
+                }
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+
+                    headers.put("Authorization", "Basic " + authKey);
+                    headers.put("Content-Type","application/json");
+                    return headers;
+                }
+            };
+            volleyQueue.add(req);
+        }
+    }
+
+    public void deleteMovementAPI(final Context context, int movementId) {
+        if (APIUrl == null)
+            setAPIUrl(context);
+        String url = APIUrl + APIPathMovements + movementId;
+        if (!Utility.hasInternetConnection(context)) {
+            Toast.makeText(context, R.string.noInternet, Toast.LENGTH_SHORT).show();
+        } else {
+            StringRequest req = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    if (changeMovementListener != null)
+                        changeMovementListener.onDeleteMovement();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println(error.getMessage());
+                }
+            }) {
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+
+                    headers.put("Authorization", "Basic " + authKey);
+                    return headers;
+                }
+            };
+            volleyQueue.add(req);
+        }
+    }
+
+
 
     public Movement getMovement(int id) {
         for (Movement c : movements)

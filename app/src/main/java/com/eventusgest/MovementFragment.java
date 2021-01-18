@@ -5,11 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -28,6 +33,7 @@ public class MovementFragment extends Fragment implements SwipeRefreshLayout.OnR
     public static final String USER = "USER_PREF_SHARED";
     public static final String CURRENT_EVENT = "CURRENT_EVENT";
     private static final int VER_MOVIMENTO = 1;
+    private SearchView searchView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     public MovementFragment() {
@@ -85,5 +91,39 @@ public class MovementFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.credential_search, menu);
+
+        final MenuItem itemPesquisa = menu.findItem(R.id.item_pesquisa);
+        searchView = (SearchView) itemPesquisa.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                ArrayList<Movement> tempMovements = new ArrayList<>();
+
+                for (Movement m : SingletonGestor.getInstance(getContext()).getAllMovementsDB())
+                    if(m.getNameCredential().toLowerCase().contains(newText.toLowerCase()))
+                        tempMovements.add(m);
+                lvMovementList.setAdapter(new MovementListAdapter(getContext(), tempMovements));
+                return true;
+            }
+        });
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        onRefresh();
     }
 }

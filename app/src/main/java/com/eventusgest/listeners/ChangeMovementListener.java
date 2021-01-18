@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public interface MovementListener {
-    void onRefreshMovementList(ArrayList<Movement> movementList);
+public interface ChangeMovementListener {
+    void onUpdateMovement(JSONObject movement);
+    void onDeleteMovement();
 }
