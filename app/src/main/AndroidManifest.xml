@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ScanQrcodeActivity"></activity>
+        <activity android:name=".ScanQrcodeActivity" />
         <activity
             android:name=".createMovementActivity"
             android:launchMode="singleTop"
@@ -40,7 +40,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ViewMovementActivity" />
+        <activity
+            android:name=".ViewMovementActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>
