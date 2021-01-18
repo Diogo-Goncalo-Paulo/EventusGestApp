@@ -1,5 +1,10 @@
 package com.eventusgest.modelo;
 
+import android.content.SharedPreferences;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
 
 public class Movement {
@@ -134,6 +139,27 @@ public class Movement {
 
     public void setLastMovement(int lastMovement) {
         this.lastMovement = lastMovement;
+    }
+
+    public JSONObject toJSON(int userId){
+
+        JSONObject jsonObject= new JSONObject();
+        try {
+            jsonObject.put("id", getId());
+            jsonObject.put("time", getTime());
+            jsonObject.put("idCredential", getIdCredential());
+            jsonObject.put("idAccessPoint", getIdAccessPoint());
+            jsonObject.put("idAreaFrom", getIdAreaFrom());
+            jsonObject.put("idAreaTo", getIdAreaTo());
+            jsonObject.put("idUser", userId);
+
+            return jsonObject;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            jsonObject = null;
+            return jsonObject;
+        }
+
     }
 }
 
