@@ -83,7 +83,7 @@ public class ViewMovementActivity extends AppCompatActivity implements AreasLeft
         tvTimeMov.setText(movement.getTime());
         tvPorteiro.setText(movement.getNameUser());
         if(movement.getLastMovement() == 1){
-            if(sharedPref.getInt(USER_ID,-1) == movement.getIdUser()) {
+            if(sharedPref.getInt(USER_ID,-1) == movement.getIdUser() || sharedPref.getString(USER_ROLE, USER_ROLE).equals("admin")) {
                 btnDeleteMov.setEnabled(true);
             }
             if(sharedPref.getString(USER_ROLE, USER_ROLE).equals("admin")){
