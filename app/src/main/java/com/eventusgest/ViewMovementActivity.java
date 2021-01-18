@@ -38,6 +38,7 @@ public class ViewMovementActivity extends AppCompatActivity implements AreasLeft
     public static final String ID = "ID";
     public static final String USER = "USER_PREF_SHARED";
     public static final String USER_ID = "USER_ID";
+    public static final String USER_ROLE = "USER_ROLE";
     private Movement movement;
     private Movement movementUpdated;
     private ArrayList<Area> areas;
@@ -74,14 +75,20 @@ public class ViewMovementActivity extends AppCompatActivity implements AreasLeft
     }
 
     private void carregarInfo () {
+        SharedPreferences sharedPref = this.getSharedPreferences(USER_ID, Context.MODE_PRIVATE);
+
         tvUCID.setText(movement.getNameCredential());
         tvAccessPoint.setText(movement.getNameAccessPoint());
         tvAreaFrom.setText(movement.getNameAreaFrom());
         tvTimeMov.setText(movement.getTime());
         tvPorteiro.setText(movement.getNameUser());
         if(movement.getLastMovement() == 1){
+            if(sharedPref.getInt(USER_ID,-1) == movement.getIdUser())
             btnDeleteMov.setEnabled(true);
-            btnSaveMov.setEnabled(true);
+            if(sharedPref.getString(USER_ROLE, USER_ROLE).equals("admin")){
+                btnSaveMov.setEnabled(true);
+            }
+
         }
 
         SingletonGestor.getInstance(this).getAreasLeft(this,movement.getIdAreaFrom());
