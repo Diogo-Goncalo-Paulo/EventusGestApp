@@ -46,40 +46,45 @@ public class ViewCredentialActivity extends AppCompatActivity implements Credent
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         int idd = getIntent().getIntExtra(ID, -1);
+
         credential = SingletonGestor.getInstance(getApplicationContext()).getCredential(idd);
 
-        setTitle(credential.getUcid());
+        if(credential != null) {
+            setTitle(credential.getUcid());
 
-        tvNoMovements = findViewById(R.id.tvNoMovements);
-        lvMovementList = findViewById(R.id.lvMovementList1);
+            tvNoMovements = findViewById(R.id.tvNoMovements);
+            lvMovementList = findViewById(R.id.lvMovementList1);
 
-        movementList = SingletonGestor.getInstance(getApplicationContext()).getCredentialMovements(credential.getId());
+            movementList = SingletonGestor.getInstance(getApplicationContext()).getCredentialMovements(credential.getId());
 
-        if (!movementList.isEmpty()) {
-            lvMovementList.setAdapter(new MovementListAdapter(getApplicationContext(), movementList));
-        } else {
-            tvNoMovements.setVisibility(View.VISIBLE);
-        }
-
-        lvMovementList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), ViewMovementActivity.class);
-                intent.putExtra(ViewMovementActivity.ID, (int) id);
-                //startActivity(intent);
-                startActivityForResult(intent, VER_MOVIMENTO);
+            if (!movementList.isEmpty()) {
+                lvMovementList.setAdapter(new MovementListAdapter(getApplicationContext(), movementList));
+            } else {
+                tvNoMovements.setVisibility(View.VISIBLE);
             }
-        });
 
-        tvNomeCarregador = findViewById(R.id.tvNomeCarregador);
-        tvTipoCarregador = findViewById(R.id.tvTipoCarregador);
-        tvInfo = findViewById(R.id.tvInfo1);
-        btnFlag = findViewById(R.id.btn_flagged);
-        btnBlock = findViewById(R.id.btn_blocked);
-        profilePicture = findViewById(R.id.profilePicture);
+            lvMovementList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(getApplicationContext(), ViewMovementActivity.class);
+                    intent.putExtra(ViewMovementActivity.ID, (int) id);
+                    //startActivity(intent);
+                    startActivityForResult(intent, VER_MOVIMENTO);
+                }
+            });
 
-        SingletonGestor.getInstance(getApplicationContext()).setCredentialFlagBlockListener(this);
-        carregarInfo();
+            tvNomeCarregador = findViewById(R.id.tvNomeCarregador);
+            tvTipoCarregador = findViewById(R.id.tvTipoCarregador);
+            tvInfo = findViewById(R.id.tvInfo1);
+            btnFlag = findViewById(R.id.btn_flagged);
+            btnBlock = findViewById(R.id.btn_blocked);
+            profilePicture = findViewById(R.id.profilePicture);
+
+            SingletonGestor.getInstance(getApplicationContext()).setCredentialFlagBlockListener(this);
+            carregarInfo();
+        } else {
+            this.finish();
+        }
     }
 
     private void carregarInfo () {

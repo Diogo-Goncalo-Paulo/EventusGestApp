@@ -234,7 +234,6 @@ public class SingletonGestor {
             JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, APIUrl + APIPathCredential + "/search?q=" + ucid, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
-                    System.out.println(response);
                     credentials = CredentialJsonParser.parserJsonCredentials(response);
                     addCredentialsDB(credentials);
 
@@ -272,7 +271,6 @@ public class SingletonGestor {
                 public void onResponse(JSONArray response) {
                     credentials = CredentialJsonParser.parserJsonCredentials(response);
                     //flagCredentialDB(credentialId, credentials.get(0));
-                    System.out.println(response);
 
                     if (credentialFlagBlockListener != null) {
                         credentialFlagBlockListener.onFlagCredential(credentials.get(0));
@@ -345,7 +343,6 @@ public class SingletonGestor {
                 @Override
                 public void onResponse(JSONArray response) {
                     movements = MovementJsonParser.parserJsonMovements(response);
-                    System.out.println(response);
                     addMovementsDB(movements);
 
                     if (movementListener != null) {

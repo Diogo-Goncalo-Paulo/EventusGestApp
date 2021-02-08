@@ -31,4 +31,6 @@
     <string name="criar_movimento">Criar Movimento</string>
     <string name="movimento_impossivel">Movimento Impossivel</string>
     <string name="sem_acceso_area">Sem acesso á area</string>
+    <string name="channel_name">EventusGest</string>
+    <string name="channel_description">EventusGest Mqtt</string>
 </resources>

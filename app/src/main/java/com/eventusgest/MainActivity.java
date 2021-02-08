@@ -1,27 +1,47 @@
 package com.eventusgest;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-public class MainActivity extends AppCompatActivity implements
-NavigationView.OnNavigationItemSelectedListener {
+import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+public class MainActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String CHANNEL_ID = "EG";
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private FragmentManager fragmentManager;
@@ -64,6 +84,9 @@ NavigationView.OnNavigationItemSelectedListener {
         carregarCabecalho();
         navigationView.setNavigationItemSelectedListener(this);
         carregarFragmentoInicial();
+
+        createNotificationChannel();
+        connectMqtt();
     }
 
     public void carregarCabecalho() {
@@ -76,7 +99,7 @@ NavigationView.OnNavigationItemSelectedListener {
 
         View nView = navigationView.getHeaderView(0);
         tvUsername = nView.findViewById(R.id.tvUsernameDisplayName);
-        if(displayname == null) {
+        if (displayname == null) {
             tvUsername.setText(username);
         } else {
             tvUsername.setText(displayname);
@@ -104,7 +127,7 @@ NavigationView.OnNavigationItemSelectedListener {
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
 
-        switch (item .getItemId()) {
+        switch (item.getItemId()) {
             case R.id.nav_movimentos:
                 fragment = new MovementFragment();
                 setTitle(item.getTitle());
@@ -122,10 +145,90 @@ NavigationView.OnNavigationItemSelectedListener {
                 startActivity(intent);
                 break;
         }
-        if( fragment!=null)
+        if (fragment != null)
             fragmentManager.beginTransaction().replace(R.id.contentFragment, fragment).commit();
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    private void connectMqtt() {
+        String server = "tcp://127.0.0.1:1883";
+        String topic = "eventusGest";
+        String clientId = MqttClient.generateClientId();
+
+        MqttAndroidClient client = new MqttAndroidClient(this.getApplicationContext(), "tcp://10.0.2.2:1883", clientId);
+
+        try {
+            IMqttToken subToken = client.connect();
+            subToken.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    try {
+                        if (client.isConnected()) {
+                            client.subscribe(topic, 0);
+                            client.setCallback(new MqttCallback() {
+                                @Override
+                                public void connectionLost(Throwable cause) {
+                                }
+
+                                @Override
+                                public void messageArrived(String topic, MqttMessage message) throws Exception {
+                                    Log.d("tag","message>>" + new String(message.getPayload()));
+                                    Log.d("tag","topic>>" + topic);
+
+                                    String json = new String(message.getPayload());
+                                    JSONObject msg = new JSONObject(json);
+
+                                    Intent intent = new Intent(getApplicationContext(), ViewCredentialActivity.class);
+                                    intent.putExtra(ViewCredentialActivity.ID, Integer.parseInt(msg.getString("credentialId")));
+                                    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
+
+
+                                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                                            .setSmallIcon(R.mipmap.eg_icon)
+                                            .setContentTitle("EventusGest")
+                                            .setContentText(msg.getString("action").equals("flag") ? "Credencial " + msg.getString("credentialId") + " marcada." : "Credencial " + msg.getString("credentialId") + " bloqueada.")
+                                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                            .setContentIntent(pendingIntent)
+                                            .setAutoCancel(true);;
+                                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+                                    notificationManager.notify(0, builder.build());
+                                }
+
+                                @Override
+                                public void deliveryComplete(IMqttDeliveryToken token) {
+
+                                }
+                            });
+                        }
+                    } catch (Exception e) {
+                        Log.d("tag","Error :" + e);
+                    }
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken,
+                                      Throwable exception) {
+                    // The subscription could not be performed, maybe the user was not
+                    // authorized to subscribe on the specified topic e.g. using wildcards
+
+                }
+            });
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }
