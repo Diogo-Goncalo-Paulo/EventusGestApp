@@ -56,7 +56,6 @@ public class CredentialFragment extends Fragment implements SwipeRefreshLayout.O
         swipeRefreshLayout.setOnRefreshListener(this);
 
         SingletonGestor.getInstance(getContext()).setCredentialListener(this);
-        SingletonGestor.getInstance(getContext()).getAllCredentialsApi(getContext());
 
         return view;
     }

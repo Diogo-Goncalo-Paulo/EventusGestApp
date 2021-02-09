@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.eventusgest.modelo.Credential;
+import com.eventusgest.modelo.SingletonGestor;
 import com.google.android.material.navigation.NavigationView;
 
 
@@ -37,6 +39,8 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
@@ -84,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements
         carregarCabecalho();
         navigationView.setNavigationItemSelectedListener(this);
         carregarFragmentoInicial();
+
+        SingletonGestor.getInstance(getApplicationContext()).getAllCredentialsApi(getApplicationContext());
 
         createNotificationChannel();
         connectMqtt();
@@ -174,26 +180,34 @@ public class MainActivity extends AppCompatActivity implements
 
                                 @Override
                                 public void messageArrived(String topic, MqttMessage message) throws Exception {
-                                    Log.d("tag","message>>" + new String(message.getPayload()));
-                                    Log.d("tag","topic>>" + topic);
+                                    Log.d("tag", "message>>" + new String(message.getPayload()));
+                                    Log.d("tag", "topic>>" + topic);
 
                                     String json = new String(message.getPayload());
                                     JSONObject msg = new JSONObject(json);
+                                    int credentialId = Integer.parseInt(msg.getString("credentialId"));
 
-                                    Intent intent = new Intent(getApplicationContext(), ViewCredentialActivity.class);
-                                    intent.putExtra(ViewCredentialActivity.ID, Integer.parseInt(msg.getString("credentialId")));
-                                    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
+                                    SingletonGestor.getInstance(getApplicationContext()).getAllCredentialsApi(getApplicationContext());
 
+                                    for (Credential c : SingletonGestor.getInstance(getApplicationContext()).getAllCredentialsDB()) {
+                                        if(c.getId() == credentialId) {
+                                            Intent intent = new Intent(getApplicationContext(), ViewCredentialActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            intent.putExtra(ViewCredentialActivity.ID, credentialId);
+                                            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), credentialId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-                                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                                            .setSmallIcon(R.mipmap.eg_icon)
-                                            .setContentTitle("EventusGest")
-                                            .setContentText(msg.getString("action").equals("flag") ? "Credencial " + msg.getString("credentialId") + " marcada." : "Credencial " + msg.getString("credentialId") + " bloqueada.")
-                                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                                            .setContentIntent(pendingIntent)
-                                            .setAutoCancel(true);;
-                                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
-                                    notificationManager.notify(0, builder.build());
+                                            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                                                    .setSmallIcon(R.mipmap.eg_icon)
+                                                    .setContentTitle("EventusGest")
+                                                    .setContentText(msg.getString("action").equals("flag") ? "Credencial " + msg.getString("credentialId") + " marcada." : msg.getString("action").equals("block") ? "Credencial " + msg.getString("credentialId") + " bloqueada." : "Credencial " + msg.getString("credentialId") + " desbloqueada.")
+                                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                                    .setContentIntent(pendingIntent)
+                                                    .setAutoCancel(true);
+                                            ;
+                                            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+                                            notificationManager.notify(0, builder.build());
+                                        }
+                                    }
                                 }
 
                                 @Override
@@ -203,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements
                             });
                         }
                     } catch (Exception e) {
-                        Log.d("tag","Error :" + e);
+                        Log.d("tag", "Error :" + e);
                     }
                 }
 
