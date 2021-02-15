@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements
     private TextView tvRole;
     private TextView tvAccessPoint;
     private TextView tvCurrentEvent;
+    private SharedPreferences sharedPrefUser;
     public static final String USER = "USER_PREF_SHARED";
     public static final String USER_ID = "USER_ID";
     public static final String USERNAME = "USERNAME";
@@ -84,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements
 
         View nView = navigationView.getHeaderView(0);
 
+        sharedPrefUser = getSharedPreferences(USER, Context.MODE_PRIVATE);
+
         fragmentManager = getSupportFragmentManager();
         carregarCabecalho();
         navigationView.setNavigationItemSelectedListener(this);
@@ -96,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void carregarCabecalho() {
-        SharedPreferences sharedPrefUser = getSharedPreferences(USER, Context.MODE_PRIVATE);
         String username = sharedPrefUser.getString(USERNAME, USERNAME);
         String displayname = sharedPrefUser.getString(DISPLAYNAME, DISPLAYNAME);
         String role = sharedPrefUser.getString(USER_ROLE, USER_ROLE);
@@ -189,23 +191,29 @@ public class MainActivity extends AppCompatActivity implements
 
                                     SingletonGestor.getInstance(getApplicationContext()).getAllCredentialsApi(getApplicationContext());
 
+                                    String role = sharedPrefUser.getString(USER_ROLE, USER_ROLE);
+                                    System.out.println(role);
+
                                     for (Credential c : SingletonGestor.getInstance(getApplicationContext()).getAllCredentialsDB()) {
                                         if(c.getId() == credentialId) {
-                                            Intent intent = new Intent(getApplicationContext(), ViewCredentialActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                            intent.putExtra(ViewCredentialActivity.ID, credentialId);
-                                            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), credentialId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                                            if(role.equals("admin")) {
+                                                Intent intent = new Intent(getApplicationContext(), ViewCredentialActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                intent.putExtra(ViewCredentialActivity.ID, credentialId);
+                                                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), credentialId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-                                            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                                                    .setSmallIcon(R.mipmap.eg_icon)
-                                                    .setContentTitle("EventusGest")
-                                                    .setContentText(msg.getString("action").equals("flag") ? "Credencial " + msg.getString("credentialId") + " marcada." : msg.getString("action").equals("block") ? "Credencial " + msg.getString("credentialId") + " bloqueada." : "Credencial " + msg.getString("credentialId") + " desbloqueada.")
-                                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                                                    .setContentIntent(pendingIntent)
-                                                    .setAutoCancel(true);
-                                            ;
-                                            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
-                                            notificationManager.notify(0, builder.build());
+                                                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                                                        .setSmallIcon(R.mipmap.eg_icon)
+                                                        .setContentTitle("EventusGest")
+                                                        .setContentText(msg.getString("action").equals("flag") ? "Credencial " + c.getUcid() + " marcada." : msg.getString("action").equals("block") ? "Credencial " + msg.getString("credentialId") + " bloqueada." : "Credencial " + msg.getString("credentialId") + " desbloqueada.")
+                                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                                        .setContentIntent(pendingIntent)
+                                                        .setAutoCancel(true);
+                                                ;
+                                                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+                                                notificationManager.notify(0, builder.build());
+                                            }
+
                                         }
                                     }
                                 }
