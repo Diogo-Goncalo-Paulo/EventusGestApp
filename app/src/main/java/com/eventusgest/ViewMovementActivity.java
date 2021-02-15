@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eventusgest.listeners.AreasLeftListener;
 import com.eventusgest.listeners.ChangeMovementListener;
@@ -178,8 +179,7 @@ public class ViewMovementActivity extends AppCompatActivity implements AreasLeft
 
     @Override
     public void onUpdateMovement(JSONObject movement) {
-        this.movement = MovementJsonParser.parserJsonMovement(movement.toString());
-        carregarInfo();
+        Toast.makeText(this, "Movimento guardado com sucesso!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
